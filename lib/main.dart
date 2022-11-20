@@ -5,6 +5,7 @@ import 'package:class_ninja/screens/auth/send_mail.dart';
 import 'package:class_ninja/screens/auth/sign_socail.dart';
 import 'package:class_ninja/screens/auth/sign_up.dart';
 import 'package:class_ninja/screens/auth/splash2.dart';
+import 'package:class_ninja/screens/main/app.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(debugShowCheckedModeBanner: false,
       title: 'ClassNinja',
-      home:Splash2(),
+      home:App(),
         getPages:[
           GetPage(name: "/splash", page:()=>Splash2()),
           GetPage(name: "/splash2", page:()=>Splash2()),
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/code", page:()=>SendCode()),
           GetPage(name: "/email", page:()=>Email()),
           GetPage(name: "/pass", page:()=>NewPass()),
+          GetPage(name: "/app", page:()=>App()),
         ]
 
     );

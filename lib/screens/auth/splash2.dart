@@ -23,6 +23,7 @@ class Splash2 extends StatelessWidget {
           ],
         ),
       ),
+
     );
   }
 }

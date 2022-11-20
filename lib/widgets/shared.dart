@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 double height=Get.height,
        width=Get.width;
-
 Color mainColor=Color(0xff308E7F),
       inputColor=Color(0xffD7EEEA);
 
@@ -51,7 +50,7 @@ Widget Input(String hint,var contrl,double w,double h, suffix,valid,change){
   return SizedBox(width:w ,height: h,
     child: TextFormField(controller: contrl,decoration: InputDecoration(
       hintText: hint,errorBorder: FieldBorder,errorMaxLines: 1,
-      hintStyle: TextStyle(fontWeight: FontWeight.w600,fontSize:18),
+      hintStyle: TextStyle(fontWeight: FontWeight.w500,fontFamily:"Kufam",fontSize:18,color: Colors.black),
       fillColor: inputColor,filled: true,
       focusedBorder:FieldBorder,
       border:FieldBorder,enabledBorder: FieldBorder,
@@ -60,6 +59,27 @@ Widget Input(String hint,var contrl,double w,double h, suffix,valid,change){
     ),
       onChanged: change,validator: valid,
     ),
+  );
+}
+Widget InputFile(String hint,double w,double h,tap){
+  return GestureDetector(
+    child: Container(width: w,height: h,
+      padding: EdgeInsets.symmetric(horizontal: 6),
+      // alignment: Alignment.centerRight,
+      decoration: BoxDecoration(color: inputColor,
+        borderRadius: BorderRadius.circular(10)
+      ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: w*0.8,height: h,
+            child:  SingleChildScrollView(scrollDirection: Axis.horizontal,
+                child: Center(child: Txt(hint, Colors.black, 18, FontWeight.w500),)),
+          ),
+          Icon(Icons.file_upload_outlined,color: mainColor)
+        ],
+      ),
+    ),
+    onTap: tap,
   );
 }
 Widget TxtBtn(String txt,Color color,double size,press){

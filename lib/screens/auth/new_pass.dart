@@ -55,6 +55,7 @@ class _NewPassState extends State<NewPass> {
               ),
             ),
           ),
+
         ),
       ),
     );
