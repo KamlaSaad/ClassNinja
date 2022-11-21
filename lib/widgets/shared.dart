@@ -10,6 +10,11 @@ Widget Txt(String txt,Color color,double size , FontWeight weight) {
   return Text(
       txt, style: TextStyle(color: color,fontFamily: "Kufam", fontSize: size, fontWeight: weight));
 }
+Widget underlineTxt(String txt,Color color,double size , FontWeight weight) {
+  return Text(
+      txt, style: TextStyle(color: color,decoration: TextDecoration.underline,
+      fontFamily: "Kufam", fontSize: size, fontWeight: weight));
+}
 // Widget Btn(String txt,Color color,Color bgColor,Color borderColor,double width,press){
 //   return ElevatedButton(
 //       style: ButtonStyle(backgroundColor:MaterialStateProperty.all(bgColor),fixedSize: MaterialStateProperty.all(Size(width, 50)),

@@ -36,7 +36,7 @@ class _DetailsState extends State<Details> {
                   children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: Txt("د/احمد عبد المجيد العربي", Colors.black, 20, FontWeight.bold),
+                  child: Txt("د/احمد عبد المجيد العربي", Colors.black, 18, FontWeight.bold),
                 ),
                 SizedBox(height: 5),
                 Container(height: 1,width: w,color: mainColor),
@@ -50,7 +50,7 @@ class _DetailsState extends State<Details> {
                 Container(height: 1,width: w,color: mainColor),
                 ListTile(
                   leading: Image.asset("imgs/map.png",width: 40,height: 40,),
-                  title: Txt("الرياض شارع ابن سينا حي المروج", Colors.black, 18, FontWeight.bold),
+                  title: Txt("الرياض شارع ابن سينا حي المروج", Colors.black, 17, FontWeight.w700),
                 )
               ]),
             ),
@@ -65,7 +65,7 @@ class _DetailsState extends State<Details> {
                 decoration: BoxDecoration(color: inputColor,
                     borderRadius: BorderRadius.circular(10)),
               child: Column(children: [
-                Txt("يمكنك متابعتنا علي مواقع التواصل الاجتماعي", Colors.black, 18, FontWeight.bold),
+                Txt("يمكنك متابعتنا علي مواقع التواصل الاجتماعي", Colors.black, 17, FontWeight.bold),
                 SizedBox(height: 10),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -89,9 +89,9 @@ class _DetailsState extends State<Details> {
       child: SingleChildScrollView(scrollDirection: Axis.horizontal,
           child:Row(
             children: [
-              CircleAvatar(radius: 18,backgroundColor: color,child: Icon(icon,color: Colors.white)),
+              CircleAvatar(radius: 16,backgroundColor: color,child: Icon(icon,color: Colors.white)),
               SizedBox(width: 5),
-              Txt(phone, Colors.black, 18, FontWeight.bold),
+              Txt(phone, Colors.black, 18, FontWeight.w500),
             ],
           )),
     );

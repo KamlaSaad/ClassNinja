@@ -28,17 +28,14 @@ class _SignUpState extends State<SignUp> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SizedBox(height: 5),
-                    Container(
-                      // color: Colors.red,
-                      width: width*0.7,
-                      // alignment: Alignment.centerLeft,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
                         Txt( "انشاء الحساب", mainColor, 25, FontWeight.bold),
-                        SizedBox(width: width*0.1),
-                        TxtBtn("تخطي الان ", Colors.black,15, (){}),
+                        SizedBox(width: width*0.07),
+                        GestureDetector(onTap: ()=>Get.toNamed("/app"),
+                          child: underlineTxt( "تخطي الان ", Colors.black, 16, FontWeight.bold),
+                        ),
                       ],),
-                    ),
                     SizedBox(height: height*0.05),
                     Center(child: Input("اسم المستخدم", authController.username, w, nameH,null,(val){
                       if (val.toString().length < 4) {
@@ -72,8 +69,7 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(height: 12),
                     Center(child: DropDown()),
                     SizedBox(height: 12),
-                    Center(child: Input("الشعار", authController.img, w,50,IconButton(onPressed: (){},
-                        icon: Icon(Icons.file_upload_outlined,color: mainColor)), (val){}, (val){})),
+                    Center(child: Obx(() => InputFile(authController.img.value, w, 50,()=>authController.uploadImg() ))),
                     SizedBox(height: 12),
                     Center(child: Input("كلمة المرور", authController.pass, w,passH,null, (val){
                       if (val.toString().length < 6) {
@@ -100,9 +96,10 @@ class _SignUpState extends State<SignUp> {
                         bool? valid = formKey.currentState?.validate();
                         // print(formKey.currentState?.validate());
                         if(valid==true)
-                          Get.toNamed("/social");
+                          Get.offNamed("/social");
                       }
                     })),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),

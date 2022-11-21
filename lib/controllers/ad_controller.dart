@@ -30,8 +30,7 @@ class AdController extends GetxController{
     if(img.isNotEmpty &&adName.text.isNotEmpty &&adPrice.text.isNotEmpty){
       Get.defaultDialog(backgroundColor: inputColor,
         title: ".",titleStyle: TextStyle(fontSize: 0,height: 0),
-        content: Align(alignment: Alignment.center,
-            child: Txt("ستتم مراجعة الاعلان من قبل الادارة قبل نشره", mainColor, 24, FontWeight.bold))
+        content:  Center(child: Txt("ستتم مراجعة الاعلان من قبل الادارة قبل نشره", mainColor, 20, FontWeight.bold))
       );
       img.value="رفع الصورة";
       adName.text="";

@@ -8,39 +8,48 @@ class Favourite extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(width: width,height: height,
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Center(child: Txt("المفضلة", mainColor, 30, FontWeight.bold)),
-            SizedBox(height: 10),
-            // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     MainBox("", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
-            //     MainBox("", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
-            //   ],
-            // ),
-            SizedBox(height: height*0.75,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 0,crossAxisSpacing: 5,childAspectRatio: 0.7,
-                      crossAxisCount: 2),
-                  itemCount: 7,
-                  itemBuilder: (context,i){
-                    return MainBox(width*0.46,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية");}
-
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              Center(child: Txt("المفضلة", mainColor, 30, FontWeight.bold)),
+              SizedBox(height: 10),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
+                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
+                ],
               ),
-            )
-            // SizedBox(height: height*0.8,
-            //   child: GridView.builder(
-            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //           // mainAxisSpacing: 12,
-            //           crossAxisCount: 2),
-            //       itemCount: 7,
-            //       itemBuilder: (context,i){
-            //         return MainBox("", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية");
-            //       }),
-            // )
-          ],
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
+                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
+                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
+                ],
+              ),
+              // SizedBox(height: height*0.75,
+              //   child: GridView.builder(
+              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //           mainAxisSpacing: 0,crossAxisSpacing: 5,childAspectRatio: 0.66,
+              //           crossAxisCount: 2),
+              //       itemCount: 7,
+              //       itemBuilder: (context,i){
+              //         return MainBox(width*0.46,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية");}
+              //
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );

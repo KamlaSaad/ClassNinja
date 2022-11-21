@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AuthController extends GetxController{
   String validEmail =r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
@@ -13,7 +15,7 @@ class AuthController extends GetxController{
       pass=TextEditingController(),
       pass2=TextEditingController(),
       address=TextEditingController(),
-      img=TextEditingController(),
+      img="الشعار".obs,
       whatsapp=TextEditingController(),
       site=TextEditingController(),
       snap=TextEditingController(),
@@ -23,7 +25,15 @@ class AuthController extends GetxController{
 
   var loading=false.obs;
 
-  void uploadImg(){
-
+  late File imgPath;
+  uploadImg()async{
+    final ImagePicker picker = ImagePicker();
+    var pickedImage = await picker.pickImage(source: ImageSource.gallery,);
+    if (pickedImage != null) {
+      imgPath =File(pickedImage.path);
+      img.value=imgPath.path.split('/').last;
+    } else {
+      print('please pick an image');
+    }
   }
 }

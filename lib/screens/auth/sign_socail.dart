@@ -24,16 +24,12 @@ class _SignSocialState extends State<SignSocial> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   SizedBox(height: 5),
-                  Container(
-                    // color: Colors.red,
-                    width: width*0.75,
-                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                  Row(mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                      Txt("التواصل الاجتماعي", mainColor, 23, FontWeight.bold),
+                      Txt("التواصل الاجتماعي", mainColor, 21, FontWeight.bold),
                       SizedBox(width: width*0.05),
                       TxtBtn("تخطي الان ", Colors.black,15, (){}),
                     ],),
-                  ),
                   SizedBox(height: height*0.05),
                   Center(child: Input("الموقع الالكتروني", authController.site, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
@@ -48,7 +44,8 @@ class _SignSocialState extends State<SignSocial> {
                   Center(child: Obx(() => Btn(authController.loading.isFalse?
                        "التالي":CircularProgressIndicator(color: Colors.white)
                       ,Colors.white, mainColor, mainColor, width*0.95, (){
-                        authController.loading.value=false;
+                    Get.offNamed("/app");
+                        // authController.loading.value=false;
                       }))),
                 ],
               ),

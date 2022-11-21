@@ -17,7 +17,7 @@ class _AppState extends State<App> {
     Home(),
     Ads(),
     Favourite(),
-    Details(),
+    Center(child: Txt("Profile", mainColor, 22, FontWeight.bold)),
   ];
   @override
   Widget build(BuildContext context) {

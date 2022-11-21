@@ -40,16 +40,21 @@ class _SendCodeState extends State<SendCode> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
+                        // Row(
+                        //   children: [
+                        //
+                        //   ],
+                        // ),
                         Input("", val1, 54, 40,null,(val){}, (val){}),
-                        SizedBox(width: 4),
+                        SizedBox(width: width*0.02),
                         Input("", val2, 54,40, null,(val){}, (val){}),
-                        SizedBox(width: 4),
+                        SizedBox(width: width*0.02),
                         Input("", val3, 54, 40,null,(val){}, (val){}),
-                        SizedBox(width: 4),
+                        SizedBox(width: width*0.02),
                         Input("", val4, 54,40, null,(val){}, (val){}),
-                        SizedBox(width: 4),
+                        SizedBox(width: width*0.02),
                         Input("", val5, 54, 40,null,(val){}, (val){}),
-                        SizedBox(width: 4),
+                        SizedBox(width: width*0.02),
                         Input("", val6, 54,40, null,(val){}, (val){}),
                       ],
                     ),
