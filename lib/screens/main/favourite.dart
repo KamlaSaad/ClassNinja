@@ -1,57 +1,77 @@
+import 'package:class_ninja/controllers/fav_controller.dart';
 import 'package:class_ninja/widgets/main_box.dart';
 import 'package:class_ninja/widgets/shared.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/bottom_bar.dart';
 class Favourite extends StatelessWidget {
-  const Favourite({Key? key}) : super(key: key);
-
+   Favourite({Key? key}) : super(key: key);
+  FavController favController=Get.put(FavController());
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(width: width,height: height,
-        child: SingleChildScrollView(
-          child: Column(
+    return Directionality(textDirection: TextDirection.rtl,
+        child: Scaffold(
+          appBar:MainBar('المفضلة',26, false,false),
+          body: Stack(
             children: [
-              SizedBox(height: 10),
-              Center(child: Txt("المفضلة", mainColor, 30, FontWeight.bold)),
-              SizedBox(height: 10),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
-                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
-                ],
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
-                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
-                ],
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
-                  MainBox(width*0.42,"", false, "1500.00","نظارة جوتشي", "", "الرياض السعودية"),
-                ],
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  MainBox(width*0.42,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية"),
-                ],
-              ),
-              // SizedBox(height: height*0.75,
-              //   child: GridView.builder(
-              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //           mainAxisSpacing: 0,crossAxisSpacing: 5,childAspectRatio: 0.66,
-              //           crossAxisCount: 2),
-              //       itemCount: 7,
-              //       itemBuilder: (context,i){
-              //         return MainBox(width*0.46,"", true, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية");}
-              //
-              //   ),
-              // )
+              Container(
+                  width: width,height: height,
+                  padding: EdgeInsets.all(10),
+                  child: SingleChildScrollView(child:
+                  Column(children: [
+                    SizedBox(height: 15),
+                    SizedBox(height: height*0.8,
+                        child:Obx(() => favController.online.isTrue?(favController.loading.isTrue?
+                        Center(child: CircularProgressIndicator(color: mainColor)):
+                        favController.data.length>0?
+                        GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisExtent:  220,
+                                mainAxisSpacing: 0,crossAxisSpacing: 5,crossAxisCount: 2),
+                            itemCount: favController.data.length,
+                            itemBuilder: (context,i){
+                              var item=favController.data[i]['ad'];
+                              print(item);
+                              String title=item['title'],
+                                  adrs=item['provider']['address'],
+                                  address=adrs.trim()=="العنوان"?"":adrs,
+                                  img=item['image'];
+                              var price=item['price'];
+                              return  GestureDetector(onTap: (){},
+                                  child: MainBox(width*0.42,img, true, "$price",title, "", address,()async{
+                                    confirmBox(".", "هل تريد حذف هذا الاعلان من المفضلة؟", ()async{
+                                      Get.back();
+                                      await favController.delFav("${item['id']}");
+                                    });
+                                  }));}
+                        ):Center(child:Txt("لايوجد عناصر بعد", Colors.black, 15, FontWeight.w600)))
+                        : Center(child: Txt("لايوجد اتصال بالانترنت", Colors.black, 15, FontWeight.w600),))
+                    )
+                  ],),)),
+              Positioned(left: 0,bottom: 0,
+                  child: BottomBar(width, [false,false,true,false]))
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
+   // FutureBox(){
+   //   return  FutureBuilder(
+   //       future: favController.getMyFav(),
+   //       builder: (context, AsyncSnapshot snap) {
+   //         switch (snap.connectionState) {
+   //           case ConnectionState.none:
+   //             return Center(child: Txt("لايوجد اتصال بالانترنت", Colors.black, 15, FontWeight.w600));
+   //           case ConnectionState.active:
+   //           case ConnectionState.waiting:
+   //             return Center(child:  CircularProgressIndicator(color: mainColor));
+   //           case ConnectionState.done:
+   //             if (snap.hasError) {
+   //               print("=======Error==========");
+   //               print(snap.error);
+   //             }
+   //             var data = snap.data;
+   //             return data!=null?
+   //
+   //         }}
+   //   );
+   // }
 }

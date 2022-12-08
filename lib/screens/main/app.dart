@@ -1,9 +1,10 @@
-import 'package:class_ninja/screens/main/ads.dart';
-import 'package:class_ninja/screens/main/details.dart';
 import 'package:class_ninja/screens/main/favourite.dart';
 import 'package:class_ninja/screens/main/home.dart';
+import 'package:class_ninja/screens/main/profile.dart';
 import 'package:class_ninja/widgets/shared.dart';
 import 'package:flutter/material.dart';
+
+import '../ads/new_ad.dart';
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
@@ -15,9 +16,9 @@ class _AppState extends State<App> {
   int selected=0;
   static List<Widget> _pages = <Widget>[
     Home(),
-    Ads(),
+    NewAd(),
     Favourite(),
-    Center(child: Txt("Profile", mainColor, 22, FontWeight.bold)),
+    Profile(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -26,21 +27,17 @@ class _AppState extends State<App> {
         body: _pages.elementAt(selected),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selected,
-          onTap: (i){
-            setState(() =>selected=i);
-          },
+          onTap: (i)=>setState(() =>selected=i),
           // fixedColor: mainColor.withOpacity(0.4),
           unselectedItemColor: mainColor.withOpacity(0.4),
           selectedItemColor: mainColor,
           selectedLabelStyle: TextStyle(color: mainColor,fontSize: 18),
           unselectedLabelStyle: TextStyle(color: Colors.white,fontSize: 0),
           items: <BottomNavigationBarItem>[
-            // Item(Icons.home,'الرئيسية'),
-            // Item(Icons.home,'الرئيسية'),
-            BottomNavigationBarItem(icon: Icon(Icons.home),label: 'الرئيسية'),
-            BottomNavigationBarItem(icon: Icon(Icons.add_box), label: 'اعلانات'),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite),label: 'المفضلة'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'الملف'),
+            BottomNavigationBarItem(icon: Icon(Icons.home,size: 26),label: 'الرئيسية'),
+            BottomNavigationBarItem(icon: Icon(Icons.add_box,size: 26), label: 'اعلانات'),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite,size: 26),label: 'المفضلة'),
+            BottomNavigationBarItem(icon: Icon(Icons.person,size: 26), label: 'الملف'),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:class_ninja/screens/auth/share_contrl.dart';
+import 'package:class_ninja/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:class_ninja/widgets/shared.dart';
 import 'package:get/get.dart';
@@ -13,49 +15,70 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   double w=width*0.95;
   AuthController authController=Get.put(AuthController());
+  String msg="";
+  var txt="مزود خدمة".obs;
+  var formKey=GlobalKey<FormState>();
+  double phoneH=50,passH=50;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Directionality(textDirection: TextDirection.rtl,
-        child: SafeArea(
-          child: Container(width: width,height: height,
+    return Directionality(textDirection: TextDirection.rtl,
+      child:Scaffold(
+        appBar: MainBar( "تسجيل الدخول",26,  false, true),
+        body: Container(width: width,height: height,
             child: SingleChildScrollView(
-              child: Column(mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBox(height: 10),
-                  // Container(
-                  //   // color: Colors.red,
-                  //   width: width*0.7,alignment: Alignment.centerLeft,
-                  //     child:
-                  Row(mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                  Txt( "تسجيل الدخول", mainColor, 25, FontWeight.bold),
-                    SizedBox(width: width*0.06),
-                    GestureDetector(onTap: ()=>Get.toNamed("/app"),
-                      child: underlineTxt( "تخطي الان ", Colors.black, 16, FontWeight.bold),
+              child:Form(key: formKey,
+                child:  Column(mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: height*0.05),
+                    Center(child: Input(TextInputType.phone,"رقم الجوال", authController.phone, w,phoneH,null, (val){
+                      if (!RegExp(authController.validPhone).hasMatch(val)) {
+                        setState(() =>phoneH=80);
+                        return 'برجاء ادحال رقم صحيح';
+                      }setState(() =>phoneH=50);
+                    },(val){})),
+                    SizedBox(height: 10),
+                    Center(child: Input(TextInputType.text,"كلمة المرور", authController.pass, w,passH, IconButton(onPressed: (){
+                      setState(() =>showPass=!showPass);
+                    }, icon: Icon(showPass?Icons.visibility_off:Icons.visibility,color: mainColor)), (val){
+                      if (val.toString().length < 8) {
+                        setState(() =>passH=80);
+                        return 'بجب الا تقل كلمة المرور عن 8 احرف';
+                      }setState(() =>passH=50);
+                    },(val){})),
+                    // Txt(msg, Colors.red, 18, FontWeight.w600),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: TxtBtn("استرداد كلمة المرور", mainColor,16, ()=>Get.toNamed("/email")),
                     ),
-                  ],),
-
-                  SizedBox(height: height*0.05),
-                  Center(child: Input("رقم الجوال", authController.phone, w,50,null, (val){}, (val){})),
-                  SizedBox(height: 10),
-                  Center(child: Input("كلمة المرور", authController.pass, w,50,null, (val){}, (val){})),
-                 Container(
-                   alignment: Alignment.topLeft,
-                   child: TxtBtn("استرداد كلمة المرور", mainColor,18, ()=>Get.toNamed("/email")),
-                 ),
-                  SizedBox(height: 7),
-                  Center(child: Btn("تسجيل الدخول",Colors.white, mainColor, mainColor, width*0.95, (){
-                    print(authController.phone.text);
-                    print(authController.pass.text);
-                  })),
-                ],
+                    SizedBox(height: 7),
+                    Center(child: Btn(Obx(() => authController.loading.isTrue?CircularProgressIndicator(color: Colors.white):btnTxt("تسجيل الدخول")),
+                        Colors.white, mainColor, mainColor, width*0.95, ()async{
+                      // print(userController.phone.isEmpty);
+                      bool? valid = formKey.currentState?.validate();
+                      print(formKey.currentState?.validate());
+                      if(valid==true) {
+                        // print(userController.pass.value);
+                        await authController.login();
+                      }
+                    })),
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: Obx((){
+                        return TxtBtn(" تسجيل الدخول $txt", mainColor,16, (){
+                          txt.value=txt.value=="مزود خدمة"?"فرد":"مزود خدمة";
+                          authController.selectedUser.value=txt.value=="مزود خدمة"?"client":"provider";
+                          print(authController.selectedUser.value);
+                        });
+                      }),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
     );
+    // Obx(() => authController.loading.isTrue?CircularProgressIndicator(color: Colors.white):
   }
 }

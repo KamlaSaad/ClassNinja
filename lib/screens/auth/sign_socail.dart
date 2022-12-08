@@ -1,5 +1,7 @@
 
-import 'package:class_ninja/controllers/auth_controller.dart';
+import 'package:class_ninja/widgets/bottom_bar.dart';
+
+import 'share_contrl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:class_ninja/widgets/shared.dart';
@@ -12,41 +14,39 @@ class SignSocial extends StatefulWidget {
 
 class _SignSocialState extends State<SignSocial> {
   double w=width*0.95;
-  AuthController authController=Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Directionality(textDirection: TextDirection.rtl,
-        child: SafeArea(
+    return  Directionality(textDirection: TextDirection.rtl,
+      child: Scaffold(appBar: MainBar("التواصل الاجتماعي",22,  false, true),
+      body:SafeArea(
           child: Container(width: width,height: height,
             child: SingleChildScrollView(
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(height: 5),
-                  Row(mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                      Txt("التواصل الاجتماعي", mainColor, 21, FontWeight.bold),
-                      SizedBox(width: width*0.05),
-                      TxtBtn("تخطي الان ", Colors.black,15, (){}),
-                    ],),
                   SizedBox(height: height*0.05),
-                  Center(child: Input("الموقع الالكتروني", authController.site, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"الموقع الالكتروني", authController.site, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
-                  Center(child: Input("سناب شات", authController.snap, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"سناب شات", authController.snap, w,50,null, (val){}, (val){})),
                   SizedBox(height: 7),
-                  Center(child: Input("تيوتر", authController.twitter, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"تيوتر", authController.twitter, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
-                  Center(child: Input("انستجراب", authController.instgram, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"انستجراب", authController.instgram, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
-                  Center(child: Input("فيسبوك", authController.face, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"فيسبوك", authController.face, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
-                  Center(child: Obx(() => Btn(authController.loading.isFalse?
-                       "التالي":CircularProgressIndicator(color: Colors.white)
-                      ,Colors.white, mainColor, mainColor, width*0.95, (){
-                    Get.offNamed("/app");
-                        // authController.loading.value=false;
-                      }))),
+                  Center(child:  Btn(Obx(() => authController.loading.isTrue?
+                  CircularProgressIndicator(color: Colors.white):
+                  btnTxt("التالي"))
+                      ,Colors.white, mainColor, mainColor, width*0.95, ()async{
+                    await authController.signUp();
+
+                    // var sent=await authController.sendCode();
+                    // if(sent)
+                    //     Get.offNamed("/code", arguments: ["sign"]);
+                    // else errMsg("عفوا حدث خطا  ");
+                            // authController.loading.value=false;
+                      })),
                 ],
               ),
             ),

@@ -38,6 +38,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   image_picker: ^0.8.6
+#  email_auth:
+  shared_preferences: ^2.0.15
+  internet_connection_checker: ^1.0.0+1
+  flutter_native_splash: ^0.1.9
+  url_launcher: ^6.1.7
+#  location: ^4.4.0
+#  geocoder: ^0.2.1
+#  flutter_geocoding: ^0.0.1
+  geocoding: ^2.0.5
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +60,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_native_splash:
+  image: imgs/splash.png
+  color: "FFFFFF"
+  android_disable_fullscreen: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -57,6 +71,7 @@ dev_dependencies:
 flutter:
   assets:
     - imgs/
+    - imgs/sale.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

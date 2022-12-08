@@ -5,18 +5,20 @@ class Splash1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container(width: width,height: height,
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage("imgs/splash.png"),fit:BoxFit.fill)
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(width: width,height: height,
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage("imgs/splash.png"),fit:BoxFit.fill)
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: height*0.1),
+            SizedBox(width: 200,height: 200,child: Image.asset("imgs/logo.png"))
+          ],
+        ),
 
       ),
-      child: Column(
-        children: [
-          SizedBox(height: height*0.12,),
-          SizedBox(width: 200,height: 200,child: Image.asset("imgs/logo.png"))
-        ],
-      ),
-
-    ));
+    );
   }
 }

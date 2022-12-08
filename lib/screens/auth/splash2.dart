@@ -1,3 +1,4 @@
+import 'package:class_ninja/screens/auth/share_contrl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:class_ninja/widgets/shared.dart';
@@ -16,16 +17,18 @@ class Splash2 extends StatelessWidget {
               // SizedBox(height: 5),
               Container(padding: EdgeInsets.all(7),
                 alignment: Alignment.centerLeft,
-                child: GestureDetector(onTap: ()=>Get.toNamed("/app"),
-                  child: underlineTxt( "تخطي الان ", Colors.black, 16, FontWeight.bold),
-                ),
+                child: SkipBtn()
               ),
               SizedBox(height: height*0.12,),
               SizedBox(width: 200,height: 200,child: Image.asset("imgs/logo.png")),
               SizedBox(height: height*0.14),
-              Btn("تسجيل الدخول", mainColor, Colors.white, mainColor, width*0.95, ()=>Get.toNamed("/login")),
+              Btn(Txt("تسجيل الدخول", Colors.black, 18, FontWeight.w600),
+                  mainColor, Colors.white, mainColor, width*0.95, (){
+                print(userController.phone.value);
+                Get.toNamed("/login");
+              }),
               SizedBox(height: 18),
-              Btn("انشاء حساب",  Colors.white,mainColor, mainColor, width*0.95, ()=>Get.toNamed("/signup")),
+              Btn(btnTxt("انشاء حساب"),  Colors.white,mainColor, mainColor, width*0.95, ()=>Get.toNamed("/signup")),
             ],
           ),
         ),

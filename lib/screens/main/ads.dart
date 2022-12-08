@@ -27,10 +27,10 @@ class _AdsState extends State<Ads> {
             // Center(child: Input("رفع الصورة",null, w,50,IconButton(onPressed: (){},
             //     icon: ), (val){}, (val){})),
             SizedBox(height: 15),
-            Center(child: Input("اسم المنتج", adController.adName, w,50,null, (val){
+            Center(child: Input(TextInputType.text,"اسم المنتج", adController.adName, w,50,null, (val){
             }, (val){})),
             SizedBox(height: 15),
-            Center(child: Input("السعر", adController.adPrice, w,50,null, (val){
+            Center(child: Input(TextInputType.number,"السعر", adController.adPrice, w,50,null, (val){
             }, (val){})),
             SizedBox(height: 15),
             Center(child: Btn("ارسال",Colors.white, mainColor, mainColor, width*0.95, ()=>adController.createAd())),
