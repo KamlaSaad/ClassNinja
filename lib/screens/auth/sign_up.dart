@@ -19,12 +19,12 @@ class _SignUpState extends State<SignUp> {
   int radioVal=0,groupVal=0;
   var formKey=GlobalKey<FormState>();
   Color btnColor=mainColor.withOpacity(0.6);
-  String address="العنوان";
+  String address="",addressMsg="";
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
       child: Scaffold(
-      appBar: MainBar("انشاء الحساب",27, false,true),
+      appBar: MainBar("انشاء الحساب",25, false,true),
       body: Container(width: width,height: height,
             child: SingleChildScrollView(
               child: Form(key: formKey,
@@ -66,8 +66,18 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(height: 10),
                     //address
                     Center(child: Obx(() => InputFile(authController.address.value, inputColor, w,50,null, ()async{
-                      await authController.getLoc();
+                      String result=await authController.getLoc();
+                      print(result);
+                      if(result.isNotEmpty) {
+                          setState(() {
+                            address = result;
+                            addressMsg = "";
+                          });}
                     }))),
+                    addressMsg.isNotEmpty?Container(alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 10,top: 5),
+                      child: Txt( addressMsg, Colors.red, 14, FontWeight.w500),
+                    ):SizedBox(height: 0,),
                     // Center(child: Input(TextInputType.text,"العنوان", authController.address, w,addressH,null, (val){
                     //   if (val.toString().length <= 2) {
                     //     setState(() =>addressH=80);
@@ -113,8 +123,10 @@ class _SignUpState extends State<SignUp> {
                       if(groupVal==1) {
                         print(authController.imgPath);
                         bool? valid = formKey.currentState?.validate();
-                        if(valid==true)
-                          Get.toNamed("/social");
+                        if(valid == true) {
+                          if( address.isEmpty) setState(() =>addressMsg="من فضلك ادخل عنوان");
+                          else Get.toNamed("/social");
+                        }
                       }
 
                     })),

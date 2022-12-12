@@ -37,19 +37,23 @@ class LoCation extends GetxController{
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return 'disabled';
+      print('disabled');
+      return null;
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return 'denied';
+       print('denied');
+       return null;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return 'deniedForever';
+      // return 'deniedForever';
+      print('deniedForever');
+      return null;
     }
     final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     longitude.value=position.longitude;

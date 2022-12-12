@@ -51,6 +51,7 @@ class Home extends StatelessWidget {
     return Column(
       children: [
         Titles(txt1, txt2, ()=>Get.toNamed("/homeAds",arguments: [shop,list])),
+        // Titles(txt1, txt2, ()=>print(myFavIds.value)),
         SizedBox(height: 10),
         SizedBox(
           height: 50,width: width*0.95,

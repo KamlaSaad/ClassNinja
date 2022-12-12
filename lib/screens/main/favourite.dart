@@ -19,28 +19,38 @@ class Favourite extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   child: SingleChildScrollView(child:
                   Column(children: [
-                    SizedBox(height: 15),
+                    // SizedBox(height: 15),
                     SizedBox(height: height*0.8,
                         child:Obx(() => favController.online.isTrue?(favController.loading.isTrue?
                         Center(child: CircularProgressIndicator(color: mainColor)):
-                        favController.data.length>0?
+                        favController.myFavs.length>0?
                         GridView.builder(
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisExtent:  220,
                                 mainAxisSpacing: 0,crossAxisSpacing: 5,crossAxisCount: 2),
-                            itemCount: favController.data.length,
+                            itemCount: favController.myFavs.length,
                             itemBuilder: (context,i){
-                              var item=favController.data[i]['ad'];
-                              print(item);
+                              var favId=favController.myFavs[i]['id'];
+                              var item=favController.myFavs[i]['ad'];
+                              // print("=====ad ${item['id']}==========");
+                              // print(item);
                               String title=item['title'],
-                                  adrs=item['provider']['address'],
-                                  address=adrs.trim()=="العنوان"?"":adrs,
+                                  // adrs=item['provider']['address'],
+                                  // address=adrs.trim()=="العنوان"?"":adrs,
                                   img=item['image'];
-                              var price=item['price'];
-                              return  GestureDetector(onTap: (){},
+                              var price=item['price'],
+                                  provider=item['provider'];
+                              String adrs="",address="";
+                              if(provider!=null){
+                                adrs=provider['address'];
+                                address=adrs.trim()=="العنوان"?"":adrs;
+                              }
+                              return  GestureDetector(onTap: (){
+                              },
                                   child: MainBox(width*0.42,img, true, "$price",title, "", address,()async{
+                                    print(item);
                                     confirmBox(".", "هل تريد حذف هذا الاعلان من المفضلة؟", ()async{
                                       Get.back();
-                                      await favController.delFav("${item['id']}");
+                                      await favController.delFav("$favId");
                                     });
                                   }));}
                         ):Center(child:Txt("لايوجد عناصر بعد", Colors.black, 15, FontWeight.w600)))

@@ -70,8 +70,9 @@ class AdController extends GetxController{
           Popup("ستتم مراجعة الاعلان من قبل الادارة قبل نشره");
           resetVals();
           await getMyAds();
-          Timer(Duration(seconds: 2), (){
-            Get.offNamed("/ads");
+          Get.back();
+          Timer(Duration(seconds: 1), (){
+            Get.back();
           });
         } else
           Popup("عفوا لم يتم اضافة الاعلان");

@@ -21,54 +21,44 @@ import 'package:flutter/material.dart';
 import 'controllers/get_token.dart';
 
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // final prefs = await SharedPreferences.getInstance();
+  // var loaded=false.obs;
+  // print(loaded);
+  // Timer(Duration(seconds: 3), (){
+  //   loaded.value=true;
+  // });
+  // print(loaded);
+  await getToken();
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'ClassNinja',
+    getPages: [
+      GetPage(name: "/splash", page: () => Splash()),
+      GetPage(name: "/splash2", page: () => Splash2()),
+      GetPage(name: "/login", page: () => Login()),
+      GetPage(name: "/signup", page: () => SignUp()),
+      GetPage(name: "/social", page: () => SignSocial()),
+      GetPage(name: "/code", page: () => SendCode()),
+      GetPage(name: "/email", page: () => Email()),
+      GetPage(name: "/pass", page: () => NewPass()),
+      GetPage(name: "/home", page: () => Home()),
+      GetPage(name: "/profile", page: () => Profile()),
+      GetPage(name: "/ads", page: () => NewAd()),
+      GetPage(name: "/fav", page: () => Favourite()),
+      GetPage(name: "/edit", page: () => EditProfile()),
+      GetPage(name: "/allAds", page: () => AllAds()),
+      GetPage(name: "/myAds", page: () => MyAds()),
+      GetPage(name: "/homeAds", page: () => HomeAds()),
+      // GetPage(name: "/allDocs", page:()=>AllDoctors()),
+      GetPage(name: "/details", page: () => Details()),
+    ],
+    // home: Obx(() => loaded.value?(userToken.isEmpty ? Splash2() : Home()):Splash1()),
+    // home:userToken.isNotEmpty?Home():Splash2)(),
+    home:Splash(),
+  ));
 }
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    getToken();
-    super.initState();
-  }
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(debugShowCheckedModeBanner: false,
-      title: 'ClassNinja',
-        getPages:[
-          GetPage(name: "/splash", page:()=>Splash()),
-          GetPage(name: "/splash2", page:()=>Splash2()),
-          GetPage(name: "/login", page:()=>Login()),
-          GetPage(name: "/signup", page:()=>SignUp()),
-          GetPage(name: "/social", page:()=>SignSocial()),
-          GetPage(name: "/code", page:()=>SendCode()),
-          GetPage(name: "/email", page:()=>Email()),
-          GetPage(name: "/pass", page:()=>NewPass()),
-          GetPage(name: "/home", page:()=>Home()),
-          GetPage(name: "/profile", page:()=>Profile()),
-          GetPage(name: "/ads", page:()=>NewAd()),
-          GetPage(name: "/fav", page:()=>Favourite()),
-          GetPage(name: "/edit", page:()=>EditProfile()),
-          GetPage(name: "/allAds", page:()=>AllAds()),
-          GetPage(name: "/myAds", page:()=>MyAds()),
-          GetPage(name: "/homeAds", page:()=>HomeAds()),
-          // GetPage(name: "/allDocs", page:()=>AllDoctors()),
-          GetPage(name: "/details", page:()=>Details()),
-        ],
-        home:Splash(),
-        // home:userToken.isNotEmpty?Home():Splash2(),
-    );
-  }
-}
-
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
   @override
@@ -78,7 +68,6 @@ class _SplashState extends State<Splash> {
   bool load=false;
   @override
   void initState() {
-    getToken();
     Timer(Duration(seconds: 3), (){
       setState(() =>load=true);
     });
@@ -86,6 +75,6 @@ class _SplashState extends State<Splash> {
   }
   @override
   Widget build(BuildContext context) {
-    return (userToken.isNotEmpty)?Home():(load?Splash2():Splash1());
+    return load?(userToken.isEmpty ? Splash2() : Home()):Splash1();
   }
 }

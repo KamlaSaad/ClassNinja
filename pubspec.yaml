@@ -60,10 +60,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-flutter_native_splash:
-  image: imgs/splash.png
-  color: "FFFFFF"
-  android_disable_fullscreen: true
+#flutter_native_splash:
+#  image: imgs/splash.png
+#  color: "FFFFFF"
+#  android_disable_fullscreen: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -72,6 +72,7 @@ flutter:
   assets:
     - imgs/
     - imgs/sale.png
+    - android/app/src/main/res/drawable/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

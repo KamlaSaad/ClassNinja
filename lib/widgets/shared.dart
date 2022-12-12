@@ -12,7 +12,7 @@ double height=Get.height,
     width=Get.width;
 Color mainColor=Color(0xff308E7F),
     inputColor=Color(0xffD7EEEA);
-
+var myFavIds=[].obs;
 Widget Txt(String txt,Color color,double size , FontWeight weight) {
   return Text(
       txt, style: TextStyle(color: color,fontFamily: "Kufam", fontSize: size, fontWeight: weight));

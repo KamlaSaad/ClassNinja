@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'conn.dart';
 import 'dart:io';
 
+import 'home_controllers.dart';
 import 'location.dart';
 class AuthController extends GetxController{
   UserController userController=Get.put(UserController());
@@ -73,13 +74,23 @@ class AuthController extends GetxController{
     }
   }
   getLoc()async{
+    String addss="";
     var result=await loCation.getLocation();
-    await loCation.goToMaps(loCation.latitude.value,loCation.longitude.value);
-    List data=await loCation.getAdress(loCation.latitude.value,loCation.longitude.value);
-    print(data);
-    if(loCation.latitude.value>0)
-      address.value=data[0];
-    else Popup("عفوا لا يمكن الوصول للموقع حاليا");
+    print("===========r/esult=========");
+    print(result);
+    if(result !=null) {
+      await loCation.goToMaps(
+          loCation.latitude.value, loCation.longitude.value);
+      List data = await loCation.getAdress(
+          loCation.latitude.value, loCation.longitude.value);
+      print(data);
+      if (loCation.latitude.value > 0) {
+        addss = data[0];
+        address.value = data[0];
+      } else
+        Popup("عفوا لا يمكن الوصول للموقع حاليا");
+    }
+    return addss;
   }
   signUp()async{
     loading.value=true;
@@ -153,7 +164,7 @@ class AuthController extends GetxController{
         userType.value=selectedUser.value;
         await saveToken();
         await userController.saveVals(selectedUser.value,data['data']['token'],userData['name'], userData['email'], userData['phone'],
-            userData['whatsapp'],address.value ,userData['lat'],userData['long'], pass.text,userData['image']??"");
+            userData['whatsapp'], userData['address'] ,userData['lat'],userData['long'], pass.text,userData['image']??"");
         resetVals();
         Get.offAllNamed("/home");
       }
@@ -212,7 +223,11 @@ class AuthController extends GetxController{
     if (done) {
       Get.offAllNamed("/splash");
       userToken.value="";
+      // HomeController home=HomeController();
+      Get.delete<HomeController>();
+      // home.doctors.clear();
       userController.resetVals();
+      myFavIds.clear();
     }else{ Popup("عفوا لم يتم الطلب يرجي المحاولة لاحقا");}
   }else{Popup(" يرجي الاتصال بالانترنت واعادة المحاولة");}
  }

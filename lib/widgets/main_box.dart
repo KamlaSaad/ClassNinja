@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/fav_controller.dart';
-FavController favController=Get.put(FavController());
+// FavController favController=Get.put(FavController());
 Widget MainBox(double w,String img,bool fav,String price,String title,String sub,String address,action){
   return Container(
       width: w,
