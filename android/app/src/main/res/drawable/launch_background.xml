@@ -9,8 +9,8 @@
 <!--            android:gravity="center"-->
 <!--            android:src=""@drawable/launch_image" />-->
 <!--    </item>-->
-    <item>
-        <bitmap android:gravity="center" android:src="@drawable/splash" />
-    </item>
+<!--    <item>-->
+<!--        <bitmap android:gravity="center" android:src="@drawable/launch_image" />-->
+<!--    </item>-->
 
 </layer-list>
