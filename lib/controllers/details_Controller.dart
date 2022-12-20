@@ -9,6 +9,8 @@ import 'location.dart';
 class DetailsController extends GetxController{
   LoCation loc=LoCation();
   var data={}.obs,
+      ads=[].obs,
+      banners=[].obs,
       loading=false.obs,
       online=false.obs,
       latitude=0.0.obs,
@@ -32,16 +34,20 @@ class DetailsController extends GetxController{
     var response=await http.get(Uri.parse(url),
         headers:{"Accept": "application/json","Accept-Language": "en"});
     var result=jsonDecode(response.body);
-    print(result);
+    // print(result);
     var done=(result['status']==1 &&result['code']==200);
     if(done){
       data.value=result['data'];
       // await loc.getLocation();
-      latitude.value=data['lat'];
-      longtude.value=data['long'];
-      List address=await loc.getAdress(latitude.value,longtude.value);
-      address1.value=address[0];
-      address2.value=address[1];
+      latitude.value=data['lat']??0.0;
+      longtude.value=data['long']??0.0;
+      if(latitude.value>0) {
+        List address = await loc.getAdress(latitude.value, longtude.value);
+        address1.value = address[0];
+        address2.value = address[1];
+      }
+      banners.value=data['banners'];
+      ads.value=data['ads'];
       // for(int i=0;i<list.length;i++){
       //   String status=list[i]['status'];
       //   if(status=="pending")
@@ -57,10 +63,10 @@ class DetailsController extends GetxController{
   }
   Future<void> siteLauncher(String url) async {
     var result=await canLaunchUrl(Uri.parse((url)));
-    // print(result);
-    if (result)
+    print(result);
+    if (result) {
       await launchUrl(Uri.parse((url)));
-    else  Popup('لايمكن الوصول للموقع حاليا');
+    } else  Popup('لايمكن الوصول للموقع الحالي');
   }
   whatsLauncher(String phone){
     String url="";

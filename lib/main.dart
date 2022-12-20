@@ -10,12 +10,14 @@ import 'package:class_ninja/screens/auth/sign_socail.dart';
 import 'package:class_ninja/screens/auth/sign_up.dart';
 import 'package:class_ninja/screens/auth/splash1.dart';
 import 'package:class_ninja/screens/auth/splash2.dart';
+import 'package:class_ninja/screens/main/banners.dart';
 import 'package:class_ninja/screens/main/details.dart';
 import 'package:class_ninja/screens/main/edit_profile.dart';
 import 'package:class_ninja/screens/main/favourite.dart';
 import 'package:class_ninja/screens/main/home.dart';
 import 'package:class_ninja/screens/main/home_ads.dart';
 import 'package:class_ninja/screens/main/profile.dart';
+import 'package:class_ninja/controllers/home_controllers.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'controllers/get_token.dart';
@@ -47,6 +49,7 @@ Future<void> main() async {
       GetPage(name: "/profile", page: () => Profile()),
       GetPage(name: "/ads", page: () => NewAd()),
       GetPage(name: "/fav", page: () => Favourite()),
+      GetPage(name: "/myBanners", page: () => Banners()),
       GetPage(name: "/edit", page: () => EditProfile()),
       GetPage(name: "/allAds", page: () => AllAds()),
       GetPage(name: "/myAds", page: () => MyAds()),
@@ -66,6 +69,7 @@ class Splash extends StatefulWidget {
 }
 class _SplashState extends State<Splash> {
   bool load=false;
+  HomeController homeController=Get.put(HomeController());
   @override
   void initState() {
     Timer(Duration(seconds: 3), (){

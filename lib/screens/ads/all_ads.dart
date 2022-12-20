@@ -5,11 +5,15 @@ import 'package:class_ninja/widgets/main_box.dart';
 import 'package:class_ninja/widgets/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/fav_controller.dart';
+
 class AllAds extends StatelessWidget {
   AllAds({Key? key}) : super(key: key);
+  FavController favController=Get.put(FavController());
   var name=TextEditingController(),
       phone=TextEditingController();
-
+  List ads=Get.arguments;
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
@@ -18,20 +22,38 @@ class AllAds extends StatelessWidget {
               leading: BackButton(color: Colors.black,),
               title: Txt("الاعلانات المميزة", mainColor, 26, FontWeight.bold),
             ),
-            body:GridView.builder(
+            body:ads.length>0?GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisExtent:  220,
-                    mainAxisSpacing: 0,crossAxisSpacing: 5,
-                    // childAspectRatio: (width*0.42)/187,
-                    crossAxisCount: 2),
-                itemCount: 5,
+                    mainAxisSpacing: 0,crossAxisSpacing: 5,crossAxisCount: 2),
+                itemCount: ads.length,
                 itemBuilder: (context,i){
+                  var item=ads[i];
+                  bool fav=myFavIds.contains(item['id']);
+                  String adrs="",address="";
+                  var provider=item['provider'];
+                  if(provider!=null){
+                    adrs=item['provider']['address'];
+                    address=adrs.trim()=="العنوان"?"":adrs;
+                  }
+                  String  type=item['type']!="shop"?"(للكشف)":"";
                   return  GestureDetector(onTap: (){
-                    if(userToken.isNotEmpty)
-                      Popup("ينكتك الان الاستفادة من العرض");
-                    else Dialog();
-                  }, child: MainBox(width*0.42,"", false, "1500.00","ا.د/يوسف علي", "(للكشف)", "الرياض السعودية",(){}));}
+                    if(provider!=null ) {
+                      print(provider['id']);
+                      Get.toNamed("/details",arguments: provider['id']);
+                    }
+                    }, child: MainBox(width*0.42,item['image'], fav, "${item['price']}",item['title'], type, address,(){
+                    if(userType.value=="client" && fav!=true) {
+                      print(item['id']);
+                      confirmBox(
+                          "اضافة الاعلان", "هل تريد اضافة الاعلان الي المفضلة",
+                              () async {
+                            Get.back();
+                            await favController.addFav("${item['id']}");
+                          });
+                    }
+                  }));}
 
-            ))
+            ):Center(child: Txt("لايوجد اعلانات مميزة", Colors.black, 16, FontWeight.w500)))
     );
   }
   void Dialog(){

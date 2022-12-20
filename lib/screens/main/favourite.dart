@@ -48,7 +48,7 @@ class Favourite extends StatelessWidget {
                               },
                                   child: MainBox(width*0.42,img, true, "$price",title, "", address,()async{
                                     print(item);
-                                    confirmBox(".", "هل تريد حذف هذا الاعلان من المفضلة؟", ()async{
+                                    confirmBox("حذف الاعلان", "هل تريد حذف هذا الاعلان من المفضلة؟", ()async{
                                       Get.back();
                                       await favController.delFav("$favId");
                                     });
@@ -58,7 +58,7 @@ class Favourite extends StatelessWidget {
                     )
                   ],),)),
               Positioned(left: 0,bottom: 0,
-                  child: BottomBar(width, [false,false,true,false]))
+                  child: BottomBar(width, [false,false,false,true,false]))
             ],
           ),
         ));

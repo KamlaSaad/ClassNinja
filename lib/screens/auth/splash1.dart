@@ -8,7 +8,7 @@ class Splash1 extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(width: width,height: height,
-        decoration: BoxDecoration(
+        decoration: BoxDecoration(color: inputColor,
             image: DecorationImage(image: AssetImage("imgs/splash.png"),fit:BoxFit.fill)
         ),
         child: Column(

@@ -61,13 +61,10 @@ Widget MainBox(double w,String img,bool fav,String price,String title,String sub
               children: [
                 Txt(" $price ", mainColor, 16, FontWeight.w700),
                 Txt(sub, Colors.grey, 13, FontWeight.normal),
-              ],
-            ),
+              ]),
           ):SizedBox(height: 0),
-          // SizedBox(height: 6),
-          // SizedBox(width:double.maxFinite,height: 20,child:
-          SingleChildScrollView(scrollDirection: Axis.horizontal,
-              child: Txt(title, Colors.black, 16, FontWeight.w700)),
+          title.isNotEmpty?SingleChildScrollView(scrollDirection: Axis.horizontal,
+              child: Txt(title, Colors.black, 16, FontWeight.w700)):SizedBox(height: 0),
           address.isNotEmpty?SingleChildScrollView(scrollDirection: Axis.horizontal,
               child: Txt(address, Color(0xffaaaaaa), 13, FontWeight.w600)):SizedBox(height: 0),
         ],

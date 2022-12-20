@@ -12,13 +12,15 @@ class HomeAds extends StatelessWidget {
   HomeAds({Key? key}) : super(key: key);
   HomeController homeController=Get.put(HomeController());
   FavController favController=Get.put(FavController());
-  bool shop=Get.arguments[0];
+  bool shop=Get.arguments[0],
+       general=Get.arguments[2];
+  List data=Get.arguments[1];
   // List favList=Get.arguments[1];
 
   @override
   Widget build(BuildContext context) {
     print(myFavIds.value);
-    List data=shop?homeController.shops:homeController.doctors;
+    // List data=shop?homeController.shops:homeController.doctors;
     return Directionality(textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(elevation: 0,backgroundColor: Colors.white,
@@ -42,7 +44,7 @@ class HomeAds extends StatelessWidget {
               print("address $adrs");
               return  GestureDetector(onTap: ()async{
                 // print(favController.favIds.value);
-                if(provider!=null) {
+                if(provider!=null && general) {
                    print(provider['id']);
                    Get.toNamed("/details",arguments: provider['id']);
                   }

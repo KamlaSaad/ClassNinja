@@ -12,10 +12,15 @@ double height=Get.height,
     width=Get.width;
 Color mainColor=Color(0xff308E7F),
     inputColor=Color(0xffD7EEEA);
+
 var myFavIds=[].obs;
+
+TextStyle TxtStyle(Color color,double size ,FontWeight weight){
+  return TextStyle(color: color,fontFamily: "Kufam", fontSize: size, fontWeight: weight);
+}
 Widget Txt(String txt,Color color,double size , FontWeight weight) {
   return Text(
-      txt, style: TextStyle(color: color,fontFamily: "Kufam", fontSize: size, fontWeight: weight));
+      txt, style: TxtStyle( color,size,weight));
 }
 Widget underlineTxt(String txt,Color color,double size , FontWeight weight) {
   return Text(
@@ -227,5 +232,41 @@ void confirmBox(String title,String msg,action){
               )
             ],
           ))
+  );
+}
+Widget ListItem(String txt1,String txt2,RxList<dynamic> list,double w,bool shop,bool general){
+  return Column(
+    children: [
+      Titles(txt1, txt2,w, ()=>Get.toNamed("/homeAds",arguments: [shop,list,general])),
+      SizedBox(height: 10),
+      SizedBox(
+        height: 50,width: w,
+        child: Obx(() => ListView.builder(itemCount: list.length,scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext contxt,i){
+              var img=list[i]['image'];
+              return  Container(margin: EdgeInsets.symmetric(horizontal: 5),
+                  color: inputColor,
+                  height: 40,width: 150,child: GestureDetector(onTap: ()async{
+                    // print(homeController.shops.value);
+                  }, child: img==null?null:Image(image: NetworkImage(img),fit: BoxFit.fill)));
+            })),
+      )
+    ],
+  );
+}
+Widget Titles(String t1,String t2,double w,action){
+  return SingleChildScrollView(scrollDirection: Axis.horizontal,
+    child:Container(width: w,child:Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Txt(t1, Colors.black, 18, FontWeight.w500),
+            Txt(t2, Colors.black, 19, FontWeight.bold),
+          ],
+        ),
+        TxtBtn("مشاهدة الكل", mainColor, 15, action)
+      ],
+    )),
   );
 }

@@ -76,7 +76,7 @@ class Profile extends StatelessWidget {
         ],
       ) ),
             Positioned(left: 0,bottom: 0,
-                child: BottomBar(width, [false,false,false,true]))
+                child: BottomBar(width, [false,false,false,false,true]))
           ],
       ),
     ));

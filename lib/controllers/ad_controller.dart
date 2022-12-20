@@ -22,7 +22,9 @@ class AdController extends GetxController{
   @override
   void onInit() async{
     online.value = await connection();
-    await getMyAds();
+    if(myAds.isEmpty) {
+      myAds.value = await getMyAds();
+    }
     // TODO: implement onInit
     super.onInit();
   }
@@ -69,7 +71,7 @@ class AdController extends GetxController{
           loading.value = false;
           Popup("ستتم مراجعة الاعلان من قبل الادارة قبل نشره");
           resetVals();
-          await getMyAds();
+          myAds.value=await getMyAds();
           Get.back();
           Timer(Duration(seconds: 1), (){
             Get.back();
@@ -82,6 +84,7 @@ class AdController extends GetxController{
       else Popup(" يرجي الاتصال بالانترنت واعادة المحاولة");
     }
   getMyAds()async{
+    var resultData=[];
     loading.value=true;
     String url="https://glass.teraninjadev.com/api/provider/myAds";
     var response=await http.get(Uri.parse(url),
@@ -91,13 +94,25 @@ class AdController extends GetxController{
     // print(data);
     var done=(data['status']==1 &&data['code']==200);
     if(done){
-      myAds.value=data['data'];
-      // print(myAds.value);
-      // for(int i=0;i<list.length;i++){
-      //   String status=list[i]['status'];
-      //
-      // }
+      resultData=data['data'];
     }
+    loading.value=false;
+    return resultData;
+  }
+  deleteAd(int id)async{
+    loading.value=true;
+    Get.back();
+    String url="https://glass.teraninjadev.com/api/provider/ads/$id";
+    var response=await http.delete(Uri.parse(url),
+        headers:{"Accept": "application/json","Accept-Language": "en",
+          'Authorization':'Bearer ${userToken.value}'});
+    var data=jsonDecode(response.body);
+    // print(data);
+    var done=(data['status']==1 &&data['code']==200);
+    if(done){
+      Popup("تم حذف الاعلان");
+      myAds.value=await getMyAds();
+    }else  Popup("عفوا لم يتم حذف الاعلان");
     loading.value=false;
     // return ads;
   }

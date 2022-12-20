@@ -66,7 +66,7 @@ class _SendCodeState extends State<SendCode> {
                     String code="";
                     print(sign);
                     code=val6.text+val5.text+val4.text+val3.text+val2.text+val1.text;
-                    if(code.length>=5) {
+                    if(code.length>5) {
                       print(sign);
                       if(sign){
                         print(authController.email.text);

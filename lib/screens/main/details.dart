@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/details_Controller.dart';
@@ -77,16 +78,18 @@ class _DetailsState extends State<Details> {
                           ],
                         ),
                         onTap: ()async{
+                          // print(contrl.data['activity']!="shop");
                           await contrl.goToMap();
                         },
                       )
                     ]),
               ),
               SizedBox(height: 20),
-              Container(height: 200,width: w,
-                  decoration: BoxDecoration(color: Colors.white,
-                      image: DecorationImage(image: AssetImage("imgs/sale.png"),fit:BoxFit.fill),
-                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10),bottomLeft:Radius.circular(10) ))),
+              //============banners==============
+              Sliderer(),
+              SizedBox(height: 20),
+              //=============ads=================
+              ListItem("", "الاعلانات", contrl.ads,width*0.95,contrl.data['activity']=="shop",false),
               SizedBox(height: 20),
               Container(height: 150,width: w,
                 padding: EdgeInsets.all(10),
@@ -97,11 +100,11 @@ class _DetailsState extends State<Details> {
                   SizedBox(height: 10),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Social("www",contrl.data.value['website']),
-                      Social("twitter",contrl.data.value['twitter']),
-                      Social("snapchat",contrl.data.value['snap_chat']),
-                      Social("insta",contrl.data.value['instagram']),
-                      Social("face",contrl.data.value['facebook']),
+                      Social("www",contrl.data['website']),
+                      Social("twitter",contrl.data['twitter']),
+                      Social("snapchat",contrl.data['snap_chat']),
+                      Social("insta",contrl.data['instagram']),
+                      Social("face",contrl.data['facebook']),
 
                     ],
                   )
@@ -138,5 +141,24 @@ class _DetailsState extends State<Details> {
   Widget Address(Rx<String> txt){
     return SingleChildScrollView(scrollDirection: Axis.horizontal,
         child:Obx(() => Txt(txt.value, Colors.black, 17, FontWeight.w700)));
+  }
+  SliderBox(image){
+    return Container(height: 200,width: w,margin: EdgeInsets.symmetric(horizontal:5),
+        decoration: BoxDecoration(color: inputColor,
+            image: DecorationImage(image: image,fit:BoxFit.fill),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10),bottomLeft:Radius.circular(10) )));
+  }
+  Widget Sliderer(){
+    return Obx(() => contrl.banners.isNotEmpty?
+    SizedBox(width: width*0.9,
+      child: CarouselSlider(
+          options: CarouselOptions(height:190,autoPlay: false),
+          items: contrl.banners.map((i) {
+            return Builder(
+                builder: (BuildContext context) {
+                  return  SliderBox( NetworkImage(i['image']));
+                });
+          }).toList()),
+    ):SliderBox(AssetImage("imgs/sale.png")));
   }
 }

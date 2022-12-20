@@ -6,23 +6,36 @@ import 'package:flutter/material.dart';
 UserController userController=UserController();
 Widget BottomBar(double w,List active){
   bool client=userController.type.value=="client",
-       provider=userType.value.trim()=="provider",
-       hideAd=client==true || userToken.value.isEmpty;
+       provider=userType.value.trim()=="provider";
+  int len=provider?4:3;
   return Container(width: w,color: Colors.white,
       padding: EdgeInsets.only(top: 5),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Item(Icons.home_filled, 'الرئيسية', "/home", active[0]),
-          !provider?SizedBox(width: 0):Item(Icons.add_box, 'اعلانتي', "/myAds", active[1]),
-          provider?SizedBox(width: 0):Item(Icons.favorite, 'المفضلة', "/fav", active[2]),
-          Item(Icons.person, 'الملف', "/profile",active[3]),
+          Item(Icons.home_filled, 'الرئيسية', "/home",len, active[0]),
+          !provider?SizedBox(width: 0):Item(Icons.add_box, 'اعلانتي', "/myAds",len, active[1]),
+          !provider?SizedBox(width: 0):Item(Icons.image, 'لافتاتي', "/myBanners",len, active[2]),
+          provider?SizedBox(width: 0):Item(Icons.favorite, 'المفضلة', "/fav",len, active[3]),
+          Item(Icons.person, 'الملف', "/profile",len,active[4]),
         ],
       ));
 }
-Widget Item(IconData icon,String txt,String route,bool active){
+// ProviderBar(List active){
+//   return Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//     children: [
+//       Item(Icons.home_filled, 'الرئيسية', "/home", active[0]),
+//       Item(Icons.add_box, 'اعلانتي', "/myAds", active[1]),
+//       Item(Icons.image, 'لافتاتي', "/myBanners", active[2]),
+//       Item(Icons.person, 'الملف', "/profile",active[3]),
+//     ],
+//   );
+// }
+Widget Item(IconData icon,String txt,String route,int len,bool active){
   return GestureDetector(
-    child: Container(width: width*0.33,
+    child: Container(
+      width: width/len,
       child: Column(
         children: [
           Icon(icon,color:active?mainColor:mainColor.withOpacity(0.5)),

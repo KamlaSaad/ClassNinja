@@ -14,6 +14,7 @@ class SignSocial extends StatefulWidget {
 
 class _SignSocialState extends State<SignSocial> {
   double w=width*0.95;
+  String msg="";
   @override
   Widget build(BuildContext context) {
     return  Directionality(textDirection: TextDirection.rtl,
@@ -25,7 +26,8 @@ class _SignSocialState extends State<SignSocial> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   SizedBox(height: height*0.05),
-                  Center(child: Input(TextInputType.text,"الموقع الالكتروني", authController.site, w,50,null, (val){}, (val){})),
+                  Center(child: Input(TextInputType.text,"الموقع الالكتروني", authController.site, w,50,null, (val){
+                  }, (val){ })),
                   SizedBox(height: 10),
                   Center(child: Input(TextInputType.text,"سناب شات", authController.snap, w,50,null, (val){}, (val){})),
                   SizedBox(height: 7),
@@ -34,12 +36,20 @@ class _SignSocialState extends State<SignSocial> {
                   Center(child: Input(TextInputType.text,"انستجراب", authController.instgram, w,50,null, (val){}, (val){})),
                   SizedBox(height: 10),
                   Center(child: Input(TextInputType.text,"فيسبوك", authController.face, w,50,null, (val){}, (val){})),
+                  msg.isNotEmpty?SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Txt(msg, Colors.red, 16, FontWeight.normal),
+                  ):SizedBox(height: 0),
                   SizedBox(height: 10),
                   Center(child:  Btn(Obx(() => authController.loading.isTrue?
                   CircularProgressIndicator(color: Colors.white):
-                  btnTxt("التالي"))
-                      ,Colors.white, mainColor, mainColor, width*0.95, ()async{
+                  btnTxt("التالي")) ,Colors.white, mainColor, mainColor, width*0.95, ()async{
                     await authController.signUp();
+                    // pathUrl();
+                    // if(msg.isEmpty){
+                    //   // await authController.signUp();
+                    //   print("path");
+                    // }
 
                     // var sent=await authController.sendCode();
                     // if(sent)
@@ -54,5 +64,29 @@ class _SignSocialState extends State<SignSocial> {
         ),
       ),
     );
+  }
+  validateUrl(link){
+    return Uri.tryParse(link)?.hasAbsolutePath ?? false;
+  }
+
+
+  pathUrl(String txt){
+    if(txt.isNotEmpty) {
+      if(!validateUrl(txt))
+        setState(() =>msg="https://google.com/الرابط غير صجيج يرجي ادخال رابط مشابه لهذا ");
+      else  setState(() =>msg="");
+    }
+    //"https://google.com/"
+    // List sites=[authController.site,authController.snap,authController.twitter,
+    //   authController.instgram,authController.face];
+    // sites.forEach((i) {
+    //   print(!validateUrl(i.text));
+    //   if(i.text.isNotEmpty) {
+    //     if(!validateUrl(i.text))
+    //       setState(() =>msg=msg="https://google.com/الرابط غير صجيج يرجي ادخال رابط مشابه لهذا ");
+    //     else  setState(() =>msg="");
+    //   }
+    // });
+
   }
 }

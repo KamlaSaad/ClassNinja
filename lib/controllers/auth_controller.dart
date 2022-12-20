@@ -223,6 +223,7 @@ class AuthController extends GetxController{
     if (done) {
       Get.offAllNamed("/splash");
       userToken.value="";
+      userType.value="";
       // HomeController home=HomeController();
       Get.delete<HomeController>();
       // home.doctors.clear();
