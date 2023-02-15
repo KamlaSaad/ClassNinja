@@ -12,8 +12,9 @@ class BannerController extends GetxController{
   var imgPath=File("").obs,
       online =true.obs,
       loading=false.obs;
-  @override
+  // @override
   void onInit() async{
+    // loading.value=true;
     online.value = await connection();
     if(myBanners.isEmpty) {
       myBanners.value=await getBanners();
@@ -22,6 +23,7 @@ class BannerController extends GetxController{
     super.onInit();
   }
   addBanner()async{
+    online.value = await connection();
     if (online.isTrue) {
       String url = "https://glass.teraninjadev.com/api/provider/banners",
           fileName = imgPath.value.path.split('/').last;
@@ -39,6 +41,7 @@ class BannerController extends GetxController{
       request.files.add(image);
       var response = await http.Response.fromStream(await request.send());
       var data = jsonDecode(response.body);
+      print(data);
       Get.back();
       if (data['status'] == 1 && data['code'] == 200) {
         myBanners.value=await getBanners();
@@ -54,15 +57,19 @@ class BannerController extends GetxController{
   getBanners()async{
     var resultData=[];
     loading.value=true;
-    String url="https://glass.teraninjadev.com/api/provider/myBanners";
-    var response=await http.get(Uri.parse(url),
-        headers:{"Accept": "application/json","Accept-Language": "en",
-          'Authorization':'Bearer ${userToken.value}'});
-    var data=jsonDecode(response.body);
-    // print(data);
-    var done=(data['status']==1 &&data['code']==200);
-    if(done){
-      resultData=data['data'];
+    online.value = await connection();
+    if (online.isTrue) {
+      String url="https://glass.teraninjadev.com/api/provider/myBanners";
+      var response=await http.get(Uri.parse(url),
+          headers:{"Accept": "application/json","Accept-Language": "en",
+            'Authorization':'Bearer ${userToken.value}'});
+      var data=jsonDecode(response.body);
+      // print(data);
+      var done=(data['status']==1 &&data['code']==200);
+      if(done){
+        resultData=data['data'];
+        myBanners.value=data['data'];
+      }
     }
     loading.value=false;
     return resultData;

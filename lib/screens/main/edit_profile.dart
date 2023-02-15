@@ -1,11 +1,12 @@
-import 'package:class_ninja/controllers/user_controller.dart';
+
+import 'package:E3yoon/controllers/get_token.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../../controllers/location.dart';
+import '../../controllers/conn.dart';
+import '../../controllers/user_controller.dart';
 import '../../widgets/shared.dart';
-// import '../auth/share_contrl.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -19,23 +20,30 @@ class _EditProfileState extends State<EditProfile> {
   late File imgPath=File("");
   var msg="".obs,
       changeImg=false.obs,
+      change=false.obs,
       name="".obs,
       phone="".obs,
       email="".obs,
       wats="".obs,
       address="".obs,
+      site="".obs,
+      face="".obs,
+      twitter="".obs,
+      snap="".obs,
+      insta="".obs,
       pass="".obs;
   String img="";
   double w=width*0.9;
   @override
   Widget build(BuildContext context) {
+    initAllSites();
     userController.updateContrls();
     img=userController.img.value;
     return Directionality(textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar:  AppBar(elevation: 0,backgroundColor: Colors.white,
           leading: BackButton(color: Colors.black,),
-          title: Txt("تعديل الحساب", mainColor, 24, FontWeight.bold),
+          title: Txt("تعديل البيانات", mainColor, 24, FontWeight.bold),
         ),
         body: Container(width: width,height: height,
           child: SingleChildScrollView(
@@ -54,13 +62,14 @@ class _EditProfileState extends State<EditProfile> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Box("اسم المستخدم",userController.name, w, userController.nameContrl,false,(){
+                  Box("اسم المستخدم",userController.name,name, w, userController.nameContrl,false,(){
                     String newVal=userController.nameContrl.text.trim();
                     if(newVal!=userController.name.value.trim()){
-                      if (userController.nameContrl.text.trim().length < 4)
-                        msg.value='يجب الا يقل الاسم عن 4 احرف';
-                      else {
+                      if (userController.nameContrl.text.trim().length < 4) {
+                        msg.value = 'يجب الا يقل الاسم عن 4 احرف';
+                      } else {
                         name.value=newVal;
+                        change.value=true;
                         msg.value='';
                         Get.back();
                       }
@@ -69,46 +78,21 @@ class _EditProfileState extends State<EditProfile> {
                       Get.back();
                     }
                   }),
+
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Box("رقم الجوال",userController.phone, w*0.44, userController.phoneContrl,false,(){
-                        String newVal=userController.phoneContrl.text.trim();
-                        if(newVal!=userController.phone.value.trim()){
-                          if (!RegExp(validPhone).hasMatch(newVal))
-                            msg.value='برجاء ادخال رقم صحيح';
-                          else {
-                            phone.value=newVal;
-                            msg.value='';
-                            Get.back();
-                          }
-                        } else {
-                          userController.phoneContrl.text=userController.phone.value;
-                          Get.back();
-                        }
-                      }),
-                      Box("رقم الواتساب",userController.wats, w*0.44, userController.watsContrl,false,(){
-                        String newVal=userController.watsContrl.text.trim();
-                        if(newVal!=userController.wats.value.trim()){
-                          if (!RegExp(validPhone).hasMatch(newVal)) msg.value='برجاء ادخال رقم صحيح';
-                          else {
-                            wats.value=newVal;
-                            msg.value='';
-                            Get.back();
-                          }
-                        } else {
-                          userController.watsContrl.text=userController.wats.value;
-                          Get.back();
-                        }
-                      }),
+                      phoneBox(w*0.44, "رقم الجوال",userController.phone,phone, userController.phoneContrl),
+                      phoneBox(w*0.44, "رقم الواتساب",userController.wats,wats, userController.watsContrl),
                     ],
                   ),
-                  Box("الايميل",userController.email, w, userController.emailContrl,false,(){
+                  Box("الايميل",userController.email,email, w, userController.emailContrl,false,(){
                     String newVal=userController.emailContrl.text.trim();
                     if(newVal!=userController.email.value.trim()){
                       if (!RegExp(validEmail).hasMatch(newVal))
                         msg.value='برجاء ادخال ايميل صحيح';
                       else {
                         email.value= newVal;
+                        change.value=true;
                         msg.value='';
                         Get.back();
                       }
@@ -117,42 +101,37 @@ class _EditProfileState extends State<EditProfile> {
                       Get.back();
                     }
                   }),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  socailBox(w, "الموقع الالكتروني", userController.site,site, userController.siteContrl),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      socailBox(w*0.44, "فيسبوك", userController.face,face, userController.faceContrl),
+                      socailBox(w*0.44, "تويتر", userController.twitter,twitter, userController.twitterContrl),
+                    ],
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      socailBox(w*0.44, "انستجرام", userController.insta,insta, userController.instaContrl),
+                      socailBox(w*0.44, "سناب شات", userController.snap,snap, userController.snapContrl),
+                    ],
+                  ),
+                  userType.value=="provider"?Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Txt("العنوان", mainColor, 16, FontWeight.w500),
                       Container(decoration: Dec(),
-                        child: Obx(() => InputFile(userController.address.value, Colors.white, w,40,null, ()async{
-                          LoCation loc=LoCation();
-                          await loc.getLocation();
-                          await loc.goToMaps(loc.latitude.value,loc.longitude.value);
-                          List data=await loc.getAdress(loc.latitude.value,loc.longitude.value);
-                          print(data);
-                          if(loc.latitude.value>0) {
-                                userController.address.value = data[0];
-                                address.value = data[0];
-                              } else {
-                            // userController.address.value=
-                            Popup("عفوا لا يمكن الوصول للموقع حاليا");
-                              }
-                            })),
+                        child: Obx(() => InputFile(userController.mapAddress.isEmpty?
+                        userController.address.value:userController.mapAddress.value, Colors.white, w,40,null, ()async{
+                          Get.toNamed("/map",arguments: [false,userController.addressLat.value,
+                            userController.addressLong.value,userController.saveLoc]);
+                          bool online=await connection();
+                          if(!online){
+                            Popup(" يرجي التاكد من الاتصال بالانترنت ");
+                            closePop();
+                          }
+                        })),
                       ),
                     ],
-                  ),
-                  // Box("العنوان",userController.address, w, userController.addressContrl,false,(){
-                  //   String newVal=userController.addressContrl.text.trim();
-                  //   if(newVal!=userController.address.value.trim()){
-                  //     if (newVal.length < 4) msg.value='برجاء ادخال عنوان صحيح';
-                  //     else {
-                  //       address.value=newVal;
-                  //       msg.value='';
-                  //       Get.back();
-                  //     }
-                  //   } else {
-                  //     userController.addressContrl.text=userController.address.value;
-                  //     Get.back();
-                  //   }
-                  // }),
-                  Box("كلمة المرور","********".obs, w, userController.pass1Contrl,true,(){
+                  ):SizedBox(height: 0),
+                  Box("كلمة المرور","********".obs,"".obs, w, userController.pass1Contrl,true,(){
                     msg.value = '';
                     String oldPass=userController.pass.value.trim(),
                     pass1=userController.pass1Contrl.text.trim(),
@@ -167,23 +146,26 @@ class _EditProfileState extends State<EditProfile> {
                         msg.value = 'يجب الا تقل كلمة المرور عن 8 احرف';
                       else {
                         msg.value = '';
+                        change.value=true;
                         pass.value = pass2;
                         Get.back();
                       }
                     }else  msg.value = 'ادخل كلمة مرور جديدة';
                   }),
                   // Spacer(),
-                  SizedBox(height: height*0.08),
+                  SizedBox(height: 20),
                   Btn(Obx(() => userController.loading.isTrue?CircularProgressIndicator(color: Colors.white,):btnTxt("تغيير")),
                       Colors.white, mainColor, mainColor,width, ()async{
-                    bool change=name.isNotEmpty||phone.isNotEmpty||wats.isNotEmpty||email.isNotEmpty||
-                        address.isNotEmpty||pass.isNotEmpty||changeImg.isTrue;
-                    print(userController.token.value);
-                    print(userController.pass.value);
-                    print(userController.pass.value);
-                    if(change){
-                      await userController.updateData(name.value,phone.value,wats.value,email.value,address.value,pass.value);
-                      print(userController.pass.value);
+                    // bool change=name.isNotEmpty||phone.isNotEmpty||wats.isNotEmpty||email.isNotEmpty||
+                    //     userController.mapAddress.isNotEmpty||pass.isNotEmpty||site.isNotEmpty||face.isNotEmpty||snap.isNotEmpty||changeImg.isTrue;
+                    // print(userController.token.value);
+                    bool send=change.isTrue||userController.mapAddress.isNotEmpty;
+                    print(send);
+                    if(send){
+                      await userController.updateData(name.value,phone.value,wats.value,email.value,
+                          address.value,site.value,face.value,twitter.value,insta.value,snap.value,pass.value);
+                      // print(userController.pass.value);
+                      change.value=false;
                     }
                   }),
                   SizedBox(height:5),
@@ -205,7 +187,7 @@ class _EditProfileState extends State<EditProfile> {
             spreadRadius: 2,blurRadius: 3,
             offset: Offset(0, 3))]);
   }
-  Widget Box(String title,Rx<String> txt,double w,TextEditingController contrl,bool pass,save){
+  Widget Box(String title,Rx<String> txt,Rx<String> newVal,double w,TextEditingController contrl,bool pass,save){
     var showMsg=false.obs;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -216,13 +198,13 @@ class _EditProfileState extends State<EditProfile> {
             child: Container(width: w,height:40,
               padding: EdgeInsets.all(8),alignment: Alignment.centerRight,
               decoration: Dec(),
-              child:SingleChildScrollView(
-                  child:Obx(() => Txt(txt.value, Colors.black, 17, FontWeight.w600))),
+              child:SingleChildScrollView(scrollDirection: Axis.horizontal,
+                  child:Obx(() => Txt(newVal.isEmpty?txt.value:newVal.value, Colors.black, 17, FontWeight.w600))),
             ),
             onTap: (){
               msg.value="";
               Get.defaultDialog(
-                  title: " تغير $title",
+                  title: " تغيير $title",
                   titleStyle: TextStyle(color: mainColor,fontFamily: "Kufam",fontWeight: FontWeight.w600),
                   content: Directionality(textDirection: TextDirection.rtl,
                       child: Column(
@@ -241,6 +223,9 @@ class _EditProfileState extends State<EditProfile> {
         ],
       ),
     );
+  }
+  validateUrl(link){
+    return Uri.tryParse(link)?.hasAbsolutePath ?? false;
   }
   Widget ImgBox(){
     print(userController.img.value);
@@ -263,9 +248,56 @@ class _EditProfileState extends State<EditProfile> {
       setState(() =>img=imgPath.path);
       userController.imgFile.value=imgPath;
       changeImg.value = true;
+      change.value = true;
     } else {
       print('please pick an image');
     }
   }
 
+  socailBox(double w,String title,Rx<String> oldVal,Rx<String> stipnVal,TextEditingController newVal){
+    return Box(title,oldVal,stipnVal, w, newVal,false,(){
+      if(newVal.text.trim()!=oldVal.value.trim()){
+        if (!validateUrl(newVal.text)) {
+          msg.value = "(https://site.com/) برجاء ادخال رابط يحتوي ع هذه الرموز";
+        } else {
+          stipnVal.value= newVal.text;
+          change.value=true;
+          msg.value='';
+          Get.back();
+        }
+      } else {
+        newVal.text=oldVal.value;
+        Get.back();
+      }
+    });
+  }
+  phoneBox(double w,String title,Rx<String> oldVal,Rx<String> stipnVal,TextEditingController newVal){
+    return Box(title,oldVal,stipnVal, w, newVal,false,(){
+      if(newVal.text.trim()!=oldVal.value.trim()){
+        if (!RegExp(validPhone).hasMatch(newVal.text))
+          msg.value='برجاء ادخال رقم صحيح';
+       else {
+        stipnVal.value= newVal.text;
+        change.value=true;
+        msg.value='';
+        Get.back();
+      }} else {
+        newVal.text=oldVal.value;
+        Get.back();
+      }
+    });
+  }
+  initSite(Rx<String> oldVal,Rx<String> stipnVal){
+    // List sites=[userController.site,userController.face,userController.twitter,userController.snap,userController.insta];
+    if(oldVal.isEmpty){
+      stipnVal.value="ضف لينك";
+    }
+  }
+  initAllSites(){
+    initSite(userController.site, site);
+    initSite(userController.face, face);
+    initSite(userController.twitter, twitter);
+    initSite(userController.snap, snap);
+    initSite(userController.insta, insta);
+  }
 }

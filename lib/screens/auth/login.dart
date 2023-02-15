@@ -1,9 +1,10 @@
-import 'package:class_ninja/screens/auth/share_contrl.dart';
-import 'package:class_ninja/widgets/bottom_bar.dart';
+
+import 'package:E3yoon/screens/auth/share_contrl.dart';
 import 'package:flutter/material.dart';
-import 'package:class_ninja/widgets/shared.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
+import '../../widgets/bottom_bar.dart';
+import '../../widgets/shared.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,11 +15,19 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   double w=width*0.95;
-  AuthController authController=Get.put(AuthController());
+  // AuthController authController=Get.put(AuthController());
   String msg="";
   var txt="مزود خدمة".obs;
   var formKey=GlobalKey<FormState>();
   double phoneH=50,passH=50;
+  @override
+  void initState() {
+   authController.resetVals();
+   setState(() {
+     txt.value=authController.selectedUser.value=="provider"?"فرد":"مزود خدمة";
+   });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
@@ -57,6 +66,7 @@ class _LoginState extends State<Login> {
                       // print(userController.phone.isEmpty);
                       bool? valid = formKey.currentState?.validate();
                       print(formKey.currentState?.validate());
+                      // print(authController.selectedUser.value);
                       if(valid==true) {
                         // print(userController.pass.value);
                         await authController.login();
@@ -65,7 +75,7 @@ class _LoginState extends State<Login> {
                     Container(
                       alignment: Alignment.topRight,
                       child: Obx((){
-                        return TxtBtn(" تسجيل الدخول $txt", mainColor,16, (){
+                        return TxtBtn(" تسجيل الدخول $txt ؟ ", mainColor,16, (){
                           txt.value=txt.value=="مزود خدمة"?"فرد":"مزود خدمة";
                           authController.selectedUser.value=txt.value=="مزود خدمة"?"client":"provider";
                           print(authController.selectedUser.value);

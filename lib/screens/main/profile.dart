@@ -1,10 +1,11 @@
-import 'package:class_ninja/controllers/get_token.dart';
-import 'package:class_ninja/widgets/bottom_bar.dart';
-import 'package:class_ninja/widgets/shared.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/get_token.dart';
 import '../../controllers/user_controller.dart';
+import '../../widgets/bottom_bar.dart';
+import '../../widgets/shared.dart';
 
 // import '../../controllers/auth_controller.dart';
 // import '../../controllers/user_controller.dart';
@@ -22,13 +23,13 @@ class Profile extends StatelessWidget {
     print(userController.phone.value);
     return Directionality(textDirection: TextDirection.rtl,
     child: Scaffold(
-      appBar:MainBar("الملف الشخصي",25, false,false),
+      appBar:MainBar("الملف الشخصي",24, false,false),
       body: Stack(
           children: [
        Container(width: width,height: height,
         child: userToken.isEmpty?NoProfile():Column(
         children: [
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           Container(width: w,padding: EdgeInsets.all( 10),
             decoration: BoxDecoration(color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -57,7 +58,8 @@ class Profile extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10,),
-          Box("تعديل الحساب", ()=>Get.toNamed("/edit")),
+          Box("تعديل البيانات", ()=>Get.toNamed("/edit")),
+          Box("الطلبات", ()=>Get.toNamed("/orders")),
           Box("حذف الحساب", (){
             print(userController.img.value);
             confirmBox("حذف الحساب", "هل انت متاكد من حذف الحساب؟", ()async{
@@ -73,8 +75,8 @@ class Profile extends StatelessWidget {
               Get.back();
               await  authController.leave(true);
             });}),
-        ],
-      ) ),
+           ],
+          ) ),
             Positioned(left: 0,bottom: 0,
                 child: BottomBar(width, [false,false,false,false,true]))
           ],
@@ -101,7 +103,7 @@ class Profile extends StatelessWidget {
             backgroundColor: inputColor,backgroundImage:  AssetImage("imgs/man.png")),
         SizedBox(height: 6),
         Txt("هل انت مستخدم جديد؟", Colors.black, 15, FontWeight.w600),
-        TxtBtn("قم بانشاء حساب الان", mainColor, 17, ()=>Get.offNamed("/signup"))
+        TxtBtn("قم بانشاء حساب الان", mainColor, 17, ()=>Get.offAllNamed("/signup"))
       ],
     );
   }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:class_ninja/widgets/shared.dart';
+import '../widgets/shared.dart';
 import 'auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +37,7 @@ class PassController extends GetxController{
   }
  verifyCode()async{
     bool done=await post("verify/password/code",{"code":code.value,"email":email.text});
-    if(done) Get.toNamed("/pass");
+    if(done) Get.offNamed("/pass");
     else Popup(" عفوا الكود الذي ادخلته غير صحيح");
   }
 

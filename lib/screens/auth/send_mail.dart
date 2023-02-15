@@ -1,8 +1,9 @@
-import 'package:class_ninja/controllers/resetPass_controller.dart';
+
 import 'package:flutter/material.dart';
-import 'package:class_ninja/widgets/shared.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/resetPass_controller.dart';
+import '../../widgets/shared.dart';
 
 class Email extends StatefulWidget {
   const Email({Key? key}) : super(key: key);

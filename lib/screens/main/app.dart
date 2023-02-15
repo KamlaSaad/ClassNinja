@@ -1,10 +1,11 @@
-import 'package:class_ninja/screens/main/favourite.dart';
-import 'package:class_ninja/screens/main/home.dart';
-import 'package:class_ninja/screens/main/profile.dart';
-import 'package:class_ninja/widgets/shared.dart';
+
+import 'package:E3yoon/screens/main/profile.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/shared.dart';
 import '../ads/new_ad.dart';
+import 'favourite.dart';
+import 'home.dart';
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 

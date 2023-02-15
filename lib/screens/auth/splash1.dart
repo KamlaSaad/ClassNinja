@@ -1,5 +1,7 @@
-import 'package:class_ninja/widgets/shared.dart';
+
 import 'package:flutter/material.dart';
+
+import '../../widgets/shared.dart';
 class Splash1 extends StatelessWidget {
   const Splash1({Key? key}) : super(key: key);
 
@@ -13,8 +15,8 @@ class Splash1 extends StatelessWidget {
         ),
         child: Column(
           children: [
-            SizedBox(height: height*0.1),
-            SizedBox(width: 200,height: 200,child: Image.asset("imgs/logo.png"))
+            SizedBox(height: height*0.35),
+            SizedBox(width: 200,height: 200,child: Image.asset("imgs/logo1.png"))
           ],
         ),
 

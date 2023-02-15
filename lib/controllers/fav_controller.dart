@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:class_ninja/widgets/shared.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../widgets/shared.dart';
 import 'conn.dart';
 import 'get_token.dart';
 class FavController extends GetxController{
   // HomeController homeController=HomeController();
   var loading=false.obs,
-      online=false.obs,
+      online=true.obs,
       // data=[].obs,
       myFavs=[].obs,
       header={"Accept": "application/json","Accept-Language": "en",
@@ -15,8 +15,10 @@ class FavController extends GetxController{
   @override
   void onInit() async{
     online.value = await connection();
-    myFavs.value=await getMyFav();
-    // myAds.value=await getMyAds();
+    // if(myFavs.isEmpty) {
+    //   myFavs.value=await getMyFav();
+    // }
+    // myFavs.value=await getMyFav();
     // TODO: implement onInit
     super.onInit();
   }
@@ -24,13 +26,15 @@ class FavController extends GetxController{
 
   }
   addFav(id)async{
+    print(userToken.value);
     online.value = await connection();
     print("loading....");
-    // loading.value=true;
     if(online.isTrue ){
+      // loading.value=true;
       String url="https://glass.teraninjadev.com/api/client/favorites";
       var response=await http.post(Uri.parse(url),
-          body: {"ad_id":id},headers:header);
+          body: {"ad_id":id},headers:{"Accept": "application/json","Accept-Language": "en",
+            'Authorization':'Bearer ${userToken.value}'});
       var data=jsonDecode(response.body);
       print(data);
       bool done=(data['status']==1 &&data['code']==200);
@@ -51,7 +55,8 @@ class FavController extends GetxController{
     if(online.isTrue){
       String url="https://glass.teraninjadev.com/api/client/favorites/$id";
       var response=await http.delete(Uri.parse(url),
-          body: {"ad_id":id},headers:header);
+          body: {"ad_id":id},headers:{"Accept": "application/json","Accept-Language": "en",
+            'Authorization':'Bearer ${userToken.value}'});
       var data=jsonDecode(response.body);
       print(data);
       bool done=(data['status']==1 &&data['code']==200);
@@ -66,6 +71,7 @@ class FavController extends GetxController{
     loading.value=false;
   }
   getMyFav()async{
+    // print(userToken.value);
     var resultData=[];
     if(userToken.isNotEmpty) {
       print("loading .......");
@@ -73,12 +79,17 @@ class FavController extends GetxController{
       online.value = await connection();
       if (online.isTrue) {
         String url = "https://glass.teraninjadev.com/api/client/favorites";
-        var response = await http.get(Uri.parse(url), headers: header);
+        var response = await http.get(Uri.parse(url), headers:
+        {"Accept": "application/json","Accept-Language": "en",'Authorization':'Bearer ${userToken.value}'});
         var result = jsonDecode(response.body);
+        // print(result );
         var done = (result['status'] == 1 && result['code'] == 200);
         if (done) {
           loading.value = false;
           resultData= result['data'];
+          myFavs.value=result['data'];
+          print("fav length ${ myFavs.length}");
+          updateIds();
         }
       }
       loading.value = false;

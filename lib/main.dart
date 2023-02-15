@@ -1,26 +1,29 @@
 import 'dart:async';
-import 'package:class_ninja/screens/ads/ads.dart';
-import 'package:class_ninja/screens/ads/new_ad.dart';
-import 'package:class_ninja/screens/ads/all_ads.dart';
-import 'package:class_ninja/screens/auth/login.dart';
-import 'package:class_ninja/screens/auth/new_pass.dart';
-import 'package:class_ninja/screens/auth/send_code.dart';
-import 'package:class_ninja/screens/auth/send_mail.dart';
-import 'package:class_ninja/screens/auth/sign_socail.dart';
-import 'package:class_ninja/screens/auth/sign_up.dart';
-import 'package:class_ninja/screens/auth/splash1.dart';
-import 'package:class_ninja/screens/auth/splash2.dart';
-import 'package:class_ninja/screens/main/banners.dart';
-import 'package:class_ninja/screens/main/details.dart';
-import 'package:class_ninja/screens/main/edit_profile.dart';
-import 'package:class_ninja/screens/main/favourite.dart';
-import 'package:class_ninja/screens/main/home.dart';
-import 'package:class_ninja/screens/main/home_ads.dart';
-import 'package:class_ninja/screens/main/profile.dart';
-import 'package:class_ninja/controllers/home_controllers.dart';
+import 'package:E3yoon/screens/ads/main_ads.dart';
+import 'package:E3yoon/screens/ads/my_ads.dart';
+import 'package:E3yoon/screens/ads/new_ad.dart';
+import 'package:E3yoon/screens/ads/special_ads.dart';
+import 'package:E3yoon/screens/auth/login.dart';
+import 'package:E3yoon/screens/auth/new_pass.dart';
+import 'package:E3yoon/screens/auth/send_code.dart';
+import 'package:E3yoon/screens/auth/send_mail.dart';
+import 'package:E3yoon/screens/auth/sign_socail.dart';
+import 'package:E3yoon/screens/auth/sign_up.dart';
+import 'package:E3yoon/screens/auth/splash1.dart';
+import 'package:E3yoon/screens/auth/splash2.dart';
+import 'package:E3yoon/screens/main/banners.dart';
+import 'package:E3yoon/screens/main/edit_profile.dart';
+import 'package:E3yoon/screens/main/favourite.dart';
+import 'package:E3yoon/screens/main/home.dart';
+import 'package:E3yoon/screens/main/map.dart';
+import 'package:E3yoon/screens/main/orders.dart';
+import 'package:E3yoon/screens/main/profile.dart';
+import 'package:E3yoon/screens/main/provider_prifile.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'controllers/get_token.dart';
+import 'controllers/home_controllers.dart';
 
 
 Future<void> main() async {
@@ -33,6 +36,10 @@ Future<void> main() async {
   // });
   // print(loaded);
   await getToken();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'ClassNinja',
@@ -45,15 +52,17 @@ Future<void> main() async {
       GetPage(name: "/code", page: () => SendCode()),
       GetPage(name: "/email", page: () => Email()),
       GetPage(name: "/pass", page: () => NewPass()),
+      GetPage(name: "/map", page: () => MapScreen()),
       GetPage(name: "/home", page: () => Home()),
       GetPage(name: "/profile", page: () => Profile()),
       GetPage(name: "/ads", page: () => NewAd()),
       GetPage(name: "/fav", page: () => Favourite()),
+      GetPage(name: "/orders", page: () => Orders()),
       GetPage(name: "/myBanners", page: () => Banners()),
       GetPage(name: "/edit", page: () => EditProfile()),
       GetPage(name: "/allAds", page: () => AllAds()),
       GetPage(name: "/myAds", page: () => MyAds()),
-      GetPage(name: "/homeAds", page: () => HomeAds()),
+      GetPage(name: "/homeAds", page: () => MainAds()),
       // GetPage(name: "/allDocs", page:()=>AllDoctors()),
       GetPage(name: "/details", page: () => Details()),
     ],
@@ -61,6 +70,10 @@ Future<void> main() async {
     // home:userToken.isNotEmpty?Home():Splash2)(),
     home:Splash(),
   ));
+  //import home data
+  HomeController homeContrl=Get.put(HomeController());
+  await  homeContrl.getData();
+  // await initApiData();
 }
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -69,10 +82,10 @@ class Splash extends StatefulWidget {
 }
 class _SplashState extends State<Splash> {
   bool load=false;
-  HomeController homeController=Get.put(HomeController());
+  // HomeController homeController=Get.put(HomeController());
   @override
   void initState() {
-    Timer(Duration(seconds: 3), (){
+    Timer(Duration(seconds: 4), (){
       setState(() =>load=true);
     });
     super.initState();
@@ -82,3 +95,6 @@ class _SplashState extends State<Splash> {
     return load?(userToken.isEmpty ? Splash2() : Home()):Splash1();
   }
 }
+
+//google map android key: AIzaSyAytUmxNs0EEtk4XAWUNgsZXoj1cdAWLIo
+//google map ios key: AIzaSyDJsnW3FTmH13CVmRGpuHIj4vnkRqDblS4

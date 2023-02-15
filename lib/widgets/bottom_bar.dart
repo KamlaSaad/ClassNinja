@@ -1,15 +1,17 @@
-import 'package:class_ninja/controllers/get_token.dart';
-import 'package:class_ninja/controllers/user_controller.dart';
-import 'package:class_ninja/widgets/shared.dart';
+
+import 'package:E3yoon/widgets/shared.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import '../controllers/get_token.dart';
+import '../controllers/user_controller.dart';
 UserController userController=UserController();
 Widget BottomBar(double w,List active){
   bool client=userController.type.value=="client",
        provider=userType.value.trim()=="provider";
   int len=provider?4:3;
   return Container(width: w,color: Colors.white,
-      padding: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(bottom: 15,top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -38,7 +40,7 @@ Widget Item(IconData icon,String txt,String route,int len,bool active){
       width: width/len,
       child: Column(
         children: [
-          Icon(icon,color:active?mainColor:mainColor.withOpacity(0.5)),
+          Icon(icon,color:active?mainColor:mainColor.withOpacity(0.5),size: 30,),
           Txt(txt, active?mainColor:Colors.white, 16, FontWeight.w500)
         ],
       ),

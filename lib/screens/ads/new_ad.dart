@@ -1,9 +1,10 @@
-import 'package:class_ninja/controllers/ad_controller.dart';
-import 'package:class_ninja/widgets/shared.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/call_Contrls/share_ads.dart';
 import '../../widgets/bottom_bar.dart';
+import '../../widgets/shared.dart';
 class NewAd extends StatefulWidget {
   const NewAd({Key? key}) : super(key: key);
 
@@ -12,9 +13,15 @@ class NewAd extends StatefulWidget {
 }
 
 class _NewAdState extends State<NewAd> {
-  AdController adController=Get.put(AdController());
+  // AdController adController=Get.put(AdController());
   double w=width*.9;
   var msg="".obs;
+  @override
+  void initState() {
+    adController.loading.value=false;
+    adController.resetVals();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,

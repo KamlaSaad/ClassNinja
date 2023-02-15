@@ -1,6 +1,8 @@
-import 'package:class_ninja/screens/auth/share_contrl.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../screens/auth/share_contrl.dart';
 
 bool showPass=false;
 String validEmail =r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
@@ -13,7 +15,8 @@ double height=Get.height,
 Color mainColor=Color(0xff308E7F),
     inputColor=Color(0xffD7EEEA);
 
-var myFavIds=[].obs;
+var myFavIds=[].obs,
+    mapLat=0.0.obs,mapLong=0.0.obs;
 
 TextStyle TxtStyle(Color color,double size ,FontWeight weight){
   return TextStyle(color: color,fontFamily: "Kufam", fontSize: size, fontWeight: weight);
@@ -70,13 +73,14 @@ var FieldBorder=OutlineInputBorder(borderSide: BorderSide(color: inputColor,widt
 
 Widget Input(TextInputType type,String hint,var contrl,double w,double h, suffix,valid,change){
   var style=TextStyle(fontWeight: FontWeight.w600,fontFamily:"Kufam",fontSize:16,color: Colors.black);
+  bool pass=contrl.toString().contains("pass");
   return SizedBox(width:w ,height: h,
-    child: TextFormField(controller: contrl,keyboardType: type,obscureText: suffix==null?false:!showPass,
+    child: TextFormField(controller: contrl,keyboardType: type,obscureText: suffix==null?pass:!showPass,
       // autovalidateMode: AutovalidateMode.onUserInteraction,
       style: style,
       decoration: InputDecoration(
           hintText: hint,errorBorder: FieldBorder,errorMaxLines: 1,
-          hintStyle: style,
+          hintStyle: style,errorStyle: TxtStyle(Colors.red, 13, FontWeight.w500),
           fillColor: inputColor,filled: true,
           focusedBorder:FieldBorder,
           border:FieldBorder,enabledBorder: FieldBorder,
@@ -119,7 +123,7 @@ activityDropDown(){
   var change=false.obs;
   String? selectedVal="doctorHospital";
   return SizedBox(width:width*0.95 ,
-      height: 55,
+      height: 58,
       child:
       Stack(
           children: [
@@ -131,7 +135,8 @@ activityDropDown(){
                 focusedBorder:FieldBorder,
                 enabledBorder:FieldBorder,
               ),
-              icon: Icon(Icons.keyboard_arrow_down,size: 30,color: mainColor),
+              // isExpanded: true,
+              icon: Icon(Icons.keyboard_arrow_down,size: 28,color: mainColor),
               validator: (value) { },
               elevation: 1,
               value: selectedVal??"",
@@ -145,8 +150,8 @@ activityDropDown(){
                 DropItem("محلات النظارات", "shop"),
                  ],
             ),
-            Obx(() =>  change.isFalse?Positioned(right: 10,bottom: 15,left: 40,
-                child: Container(color: inputColor,
+            Obx(() =>  change.isFalse?Positioned(right: 10,bottom: 5,left: 40,
+                child: Container(color:inputColor,height: 50,alignment: Alignment.centerRight,
                   child: Txt("نوع النشاط", Colors.black, 16, FontWeight.w600),
                 )):SizedBox(height: 0))
           ])
@@ -156,7 +161,7 @@ UserDropDown(){
   var change=false.obs;
   String? selectedVal="client";
   return SizedBox(width:width*0.95 ,
-      height: 55,
+      height: 58,
       child:Stack(
           children: [
             DropdownButtonFormField<String>(
@@ -181,8 +186,8 @@ UserDropDown(){
                 DropItem("مزود خدمة","provider"),
               ],
             ),
-            Obx(() =>  change.isFalse?Positioned(right: 10,bottom: 15,left: 40,
-                child: Container(color: inputColor,
+            Obx(() =>  change.isFalse?Positioned(right: 10,bottom: 5,left: 40,
+                child: Container(color:inputColor,height: 50,alignment: Alignment.centerRight,
                   child: Txt("نوع المستخدم", Colors.black, 16, FontWeight.w600),
                 )):SizedBox(height: 0))
           ])
@@ -196,7 +201,7 @@ DropItem(String txt,String val){
 }
 Widget errMsg(String error){
   return error.isNotEmpty?Padding(
-    padding: const EdgeInsets.only(right: 10),
+    padding: const EdgeInsets.only(right: 10,top: 5),
     child: Txt(error, Colors.red, 16, FontWeight.w500),
   ): SizedBox(height: 0);
 }
@@ -206,6 +211,9 @@ void Popup(String msg){
       content:  Directionality(textDirection: TextDirection.rtl,
           child: Center(child: Txt(msg, mainColor, 20, FontWeight.bold)))
   );
+}
+closePop(){
+  Timer(Duration(seconds: 3), () =>Get.back());
 }
 void confirmBox(String title,String msg,action){
   Get.defaultDialog(
@@ -218,12 +226,10 @@ void confirmBox(String title,String msg,action){
               SizedBox(height: 10),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    height: 38,
+                  SizedBox(width: width*0.32,height: 38,
                     child: Btn(btnTxt("تاكيد"),Colors.white, mainColor, mainColor, width*0.35, action),
                   ),
-                  SizedBox(
-                    height: 38,
+                  SizedBox(width: width*0.32,height: 38,
                     child:Btn(Txt("الغاء",  mainColor, 18, FontWeight.w600),
                       mainColor, inputColor,mainColor, width*0.35, ()=>Get.back())),
                   // TxtBtn("تاكيد", mainColor, 18, action),
@@ -234,21 +240,25 @@ void confirmBox(String title,String msg,action){
           ))
   );
 }
-Widget ListItem(String txt1,String txt2,RxList<dynamic> list,double w,bool shop,bool general){
+Widget ListItem(String txt1,String txt2,RxList<dynamic> list,double w,bool shop,bool general,bool margin){
   return Column(
     children: [
       Titles(txt1, txt2,w, ()=>Get.toNamed("/homeAds",arguments: [shop,list,general])),
       SizedBox(height: 10),
-      SizedBox(
+      Container(margin: EdgeInsets.symmetric(vertical:margin?height*0.04:0),
         height: 50,width: w,
         child: Obx(() => ListView.builder(itemCount: list.length,scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext contxt,i){
-              var img=list[i]['image'];
+              String img=list[i]['image'];
+              // print("img");
+              // print(img);
               return  Container(margin: EdgeInsets.symmetric(horizontal: 5),
-                  color: inputColor,
-                  height: 40,width: 150,child: GestureDetector(onTap: ()async{
-                    // print(homeController.shops.value);
-                  }, child: img==null?null:Image(image: NetworkImage(img),fit: BoxFit.fill)));
+                  height: 40,width: 150,
+                  decoration: BoxDecoration(color: inputColor,
+                      image: img.isNotEmpty? DecorationImage(image:NetworkImage(img),fit: BoxFit.fill):null,
+                      borderRadius: BorderRadius.circular(0)),
+                  // child: GestureDetector(onTap: (){}, child: img.isEmpty?null:Image(image: NetworkImage(img),fit: BoxFit.fill))
+              );
             })),
       )
     ],

@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:class_ninja/controllers/get_token.dart';
-import 'package:flutter/material.dart';
-import 'package:class_ninja/widgets/shared.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import '../widgets/shared.dart';
 import 'conn.dart';
+import 'get_token.dart';
 class AdController extends GetxController{
   var myAds=[].obs;
   var img="رفع الصورة".obs,
@@ -45,8 +44,9 @@ class AdController extends GetxController{
       }
   }
   createAd()async{
+    loading.value = true;
+    online.value = await connection();
       if (online.isTrue) {
-        loading.value = true;
         String url = "https://glass.teraninjadev.com/api/provider/ads",
             fileName = imgPath.path.split('/').last;
         print(url);
@@ -69,50 +69,59 @@ class AdController extends GetxController{
         print(data);
         if (data['status'] == 1 && data['code'] == 200) {
           loading.value = false;
+          Get.back();
           Popup("ستتم مراجعة الاعلان من قبل الادارة قبل نشره");
           resetVals();
           myAds.value=await getMyAds();
-          Get.back();
           Timer(Duration(seconds: 1), (){
             Get.back();
           });
         } else
           Popup("عفوا لم يتم اضافة الاعلان");
-        loading.value = false;
         resetVals();
        }
       else Popup(" يرجي الاتصال بالانترنت واعادة المحاولة");
+    loading.value = false;
     }
   getMyAds()async{
     var resultData=[];
-    loading.value=true;
-    String url="https://glass.teraninjadev.com/api/provider/myAds";
-    var response=await http.get(Uri.parse(url),
-        headers:{"Accept": "application/json","Accept-Language": "en",
-      'Authorization':'Bearer ${userToken.value}'});
-    var data=jsonDecode(response.body);
-    // print(data);
-    var done=(data['status']==1 &&data['code']==200);
-    if(done){
-      resultData=data['data'];
+    online.value = await connection();
+    if(online.isTrue){
+      loading.value=true;
+      String url="https://glass.teraninjadev.com/api/provider/myAds";
+      var response=await http.get(Uri.parse(url),
+          headers:{"Accept": "application/json","Accept-Language": "en",
+            'Authorization':'Bearer ${userToken.value}'});
+      var data=jsonDecode(response.body);
+      loading.value=false;
+      // print(data);
+      var done=(data['status']==1 &&data['code']==200);
+      if(done){
+        resultData=data['data'];
+        myAds.value=resultData;
+      }
     }
     loading.value=false;
     return resultData;
   }
   deleteAd(int id)async{
-    loading.value=true;
     Get.back();
-    String url="https://glass.teraninjadev.com/api/provider/ads/$id";
-    var response=await http.delete(Uri.parse(url),
-        headers:{"Accept": "application/json","Accept-Language": "en",
-          'Authorization':'Bearer ${userToken.value}'});
-    var data=jsonDecode(response.body);
-    // print(data);
-    var done=(data['status']==1 &&data['code']==200);
-    if(done){
-      Popup("تم حذف الاعلان");
-      myAds.value=await getMyAds();
-    }else  Popup("عفوا لم يتم حذف الاعلان");
+    online.value = await connection();
+    if(online.isTrue){
+      loading.value=true;
+      Get.back();
+      String url="https://glass.teraninjadev.com/api/provider/ads/$id";
+      var response=await http.delete(Uri.parse(url),
+          headers:{"Accept": "application/json","Accept-Language": "en",
+            'Authorization':'Bearer ${userToken.value}'});
+      var data=jsonDecode(response.body);
+      // print(data);
+      var done=(data['status']==1 &&data['code']==200);
+      if(done){
+        Popup("تم حذف الاعلان");
+        myAds.value=await getMyAds();
+      }else  Popup("عفوا لم يتم حذف الاعلان");
+    }else Popup(" يرجي الاتصال بالانترنت واعادة المحاولة");
     loading.value=false;
     // return ads;
   }

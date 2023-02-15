@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:class_ninja/widgets/shared.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/resetPass_controller.dart';
+import '../../widgets/shared.dart';
 
 class NewPass extends StatefulWidget {
   const NewPass({Key? key}) : super(key: key);
@@ -51,8 +51,8 @@ class _NewPassState extends State<NewPass> {
                         else if(pass2!=pass1)  setState(() =>error='كلمة المرور غير متطابقة');
                         else{
                           setState(() =>error='');
-                          print(passController.code.value);
-                          print(passController.email.text);
+                          // print(passController.code.value);
+                          // print(passController.email.text);
                           await passController.resetPass();
                         }
                       }

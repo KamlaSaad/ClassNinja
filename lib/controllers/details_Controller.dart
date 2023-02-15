@@ -12,7 +12,7 @@ class DetailsController extends GetxController{
       ads=[].obs,
       banners=[].obs,
       loading=false.obs,
-      online=false.obs,
+      online=true.obs,
       latitude=0.0.obs,
       longtude=0.0.obs,
       address1="".obs,
@@ -30,7 +30,7 @@ class DetailsController extends GetxController{
   getData(int id)async{
     print("loading .......");
     loading.value=true;
-    String url="https://glass.teraninjadev.com/api/provider/data/$id";
+    String url="https://glass.teraninjadev.com/api/provider/showProvider/$id";
     var response=await http.get(Uri.parse(url),
         headers:{"Accept": "application/json","Accept-Language": "en"});
     var result=jsonDecode(response.body);
@@ -41,24 +41,15 @@ class DetailsController extends GetxController{
       // await loc.getLocation();
       latitude.value=data['lat']??0.0;
       longtude.value=data['long']??0.0;
-      if(latitude.value>0) {
-        List address = await loc.getAdress(latitude.value, longtude.value);
-        address1.value = address[0];
-        address2.value = address[1];
-      }
       banners.value=data['banners'];
       ads.value=data['ads'];
-      // for(int i=0;i<list.length;i++){
-      //   String status=list[i]['status'];
-      //   if(status=="pending")
-      //     ads.add(list[i]);
-      // }
     }
     loading.value=false;
   }
   goToMap()async{
     if(latitude.value>0){
-      loc.goToMaps(latitude.value,longtude.value);
+      Get.toNamed("/map",arguments: [true,latitude.value,longtude.value,(){}]);
+      // loc.goToMaps(latitude.value,longtude.value);
     }else Popup("لايمكن الوصول للموقع حاليا");
   }
   Future<void> siteLauncher(String url) async {
@@ -66,7 +57,7 @@ class DetailsController extends GetxController{
     print(result);
     if (result) {
       await launchUrl(Uri.parse((url)));
-    } else  Popup('لايمكن الوصول للموقع الحالي');
+    } else  Popup('لايمكن الوصول للرابط الحالي');
   }
   whatsLauncher(String phone){
     String url="";
