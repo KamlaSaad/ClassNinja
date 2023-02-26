@@ -1,4 +1,5 @@
 
+import 'package:E3yoon/controllers/call_Contrls/share_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
@@ -60,6 +61,24 @@ class Profile extends StatelessWidget {
           SizedBox(height: 10,),
           Box("تعديل البيانات", ()=>Get.toNamed("/edit")),
           Box("الطلبات", ()=>Get.toNamed("/orders")),
+          Box("الرسائل", ()async{
+            // Map msg={ "receiver": {"id": 1," type":" client"},"sender": {"id": 1," type":" client"}};
+            // print(msg['sender']['id']);
+
+            // if(chatContrl.chatId.isEmpty){
+            //   await chatContrl.addChat();
+            // }
+            // chatContrl.chatId.value="sHgNjjHYXIC9KvmNHyzJ";
+            // var msg=await chatContrl.getLastMsg("sHgNjjHYXIC9KvmNHyzJ");
+            // print(msg);
+            // chatContrl.getMessages();
+            // var chat=await chatContrl.addMsg("Hello",{"id":1,"type":"client"});
+            // var chats=await chatContrl.getChats();
+            // print(chats);
+            // chatContrl.getUser("client1");
+           print(chatContrl.currentUser);
+            Get.toNamed("/chats");
+          }),
           Box("حذف الحساب", (){
             print(userController.img.value);
             confirmBox("حذف الحساب", "هل انت متاكد من حذف الحساب؟", ()async{

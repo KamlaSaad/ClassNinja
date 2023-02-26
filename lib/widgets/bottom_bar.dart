@@ -1,8 +1,6 @@
-
 import 'package:E3yoon/widgets/shared.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
 import '../controllers/get_token.dart';
 import '../controllers/user_controller.dart';
 UserController userController=UserController();
@@ -23,18 +21,8 @@ Widget BottomBar(double w,List active){
         ],
       ));
 }
-// ProviderBar(List active){
-//   return Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//     children: [
-//       Item(Icons.home_filled, 'الرئيسية', "/home", active[0]),
-//       Item(Icons.add_box, 'اعلانتي', "/myAds", active[1]),
-//       Item(Icons.image, 'لافتاتي', "/myBanners", active[2]),
-//       Item(Icons.person, 'الملف', "/profile",active[3]),
-//     ],
-//   );
-// }
 Widget Item(IconData icon,String txt,String route,int len,bool active){
+  // var mainColor;
   return GestureDetector(
     child: Container(
       width: width/len,

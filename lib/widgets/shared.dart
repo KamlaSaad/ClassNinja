@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../screens/auth/share_contrl.dart';
 
 bool showPass=false;
@@ -34,6 +33,10 @@ Widget SkipBtn(){
   return GestureDetector(onTap: ()=>Get.offAllNamed("/home"),
     child: underlineTxt( "تخطي الان ", Colors.black, 16, FontWeight.bold),
   );
+}
+defaultImg(var img,double r){
+  return img!=null && img.isNotEmpty?CircleAvatar(radius: r,backgroundColor: mainColor,backgroundImage:NetworkImage(img))
+      :CircleAvatar(radius: 25,backgroundColor: inputColor,backgroundImage:AssetImage("imgs/man.png"));
 }
 // Widget Btn(String txt,Color color,Color bgColor,Color borderColor,double width,press){
 //   return ElevatedButton(
@@ -73,9 +76,9 @@ var FieldBorder=OutlineInputBorder(borderSide: BorderSide(color: inputColor,widt
 
 Widget Input(TextInputType type,String hint,var contrl,double w,double h, suffix,valid,change){
   var style=TextStyle(fontWeight: FontWeight.w600,fontFamily:"Kufam",fontSize:16,color: Colors.black);
-  bool pass=contrl.toString().contains("pass");
+  bool pass=contrl.toString().toLowerCase().contains("pass");
   return SizedBox(width:w ,height: h,
-    child: TextFormField(controller: contrl,keyboardType: type,obscureText: suffix==null?pass:!showPass,
+    child: TextFormField(controller: contrl,keyboardType: type,obscureText: pass,
       // autovalidateMode: AutovalidateMode.onUserInteraction,
       style: style,
       decoration: InputDecoration(

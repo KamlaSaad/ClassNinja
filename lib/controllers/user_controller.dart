@@ -15,6 +15,7 @@ class UserController extends GetxController{
   LoCation loCation=LoCation();
   var token="".obs,
       type="".obs,
+      id="".obs,
       name="".obs,
       phone="".obs,
       wats="".obs,
@@ -91,6 +92,7 @@ class UserController extends GetxController{
     // }
     type.value=prefs.getString("type")??"";
     name.value=prefs.getString("name")??"";
+    id.value=prefs.getString("id")??"";
     token.value=prefs.getString("token")??"";
     email.value=prefs.getString("email")??"";
     phone.value=prefs.getString("phone")??"";
@@ -109,6 +111,7 @@ class UserController extends GetxController{
   storeVals()async{
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('type', type.value);
+    await prefs.setString('id', id.value);
     await prefs.setString('name', name.value);
     await prefs.setString('email', email.value);
     await prefs.setString('phone', phone.value);
@@ -128,6 +131,7 @@ class UserController extends GetxController{
   resetVals()async{
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
+    id.value="";
     name.value="";
     type.value="";
     email.value="";
@@ -144,7 +148,8 @@ class UserController extends GetxController{
     insta.value="";
 
   }
-  saveVals(tt,t,n,e,ph,w,a,aLat,aLong,p,i,s,f,tw,sn,ins)async{
+  saveVals(idd,tt,t,n,e,ph,w,a,aLat,aLong,p,i,s,f,tw,sn,ins)async{
+    id.value=idd;
     type.value=tt;
     name.value=n;
     email.value=e;
@@ -212,7 +217,7 @@ class UserController extends GetxController{
         loading.value=false;
         Popup("تم التحديث بنجاح");
         var user=data['data'];
-        saveVals(type.value,token.value, user['name'], user['email'],user['phone'],
+        saveVals("${user['id']}",type.value,token.value, user['name'], user['email'],user['phone'],
             user['whatsapp'], user['address'],user['lat'],user['long'], p.isEmpty?pass.value:p, user['image'],
             user['website'],user['facebook'],user['twitter'],user['snap_chat'],user['instagram']);
       }else{

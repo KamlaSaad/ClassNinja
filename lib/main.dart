@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:E3yoon/controllers/call_Contrls/share_chat.dart';
 import 'package:E3yoon/screens/ads/main_ads.dart';
 import 'package:E3yoon/screens/ads/my_ads.dart';
 import 'package:E3yoon/screens/ads/new_ad.dart';
@@ -12,6 +13,8 @@ import 'package:E3yoon/screens/auth/sign_up.dart';
 import 'package:E3yoon/screens/auth/splash1.dart';
 import 'package:E3yoon/screens/auth/splash2.dart';
 import 'package:E3yoon/screens/main/banners.dart';
+import 'package:E3yoon/screens/main/chat.dart';
+import 'package:E3yoon/screens/main/chats.dart';
 import 'package:E3yoon/screens/main/edit_profile.dart';
 import 'package:E3yoon/screens/main/favourite.dart';
 import 'package:E3yoon/screens/main/home.dart';
@@ -19,6 +22,7 @@ import 'package:E3yoon/screens/main/map.dart';
 import 'package:E3yoon/screens/main/orders.dart';
 import 'package:E3yoon/screens/main/profile.dart';
 import 'package:E3yoon/screens/main/provider_prifile.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +32,7 @@ import 'controllers/home_controllers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // final prefs = await SharedPreferences.getInstance();
   // var loaded=false.obs;
   // print(loaded);
@@ -58,6 +63,8 @@ Future<void> main() async {
       GetPage(name: "/ads", page: () => NewAd()),
       GetPage(name: "/fav", page: () => Favourite()),
       GetPage(name: "/orders", page: () => Orders()),
+      GetPage(name: "/chats", page: () => Chats()),
+      GetPage(name: "/chat", page: () => Chat()),
       GetPage(name: "/myBanners", page: () => Banners()),
       GetPage(name: "/edit", page: () => EditProfile()),
       GetPage(name: "/allAds", page: () => AllAds()),
@@ -73,6 +80,7 @@ Future<void> main() async {
   //import home data
   HomeController homeContrl=Get.put(HomeController());
   await  homeContrl.getData();
+  await  chatContrl.getChats();
   // await initApiData();
 }
 class Splash extends StatefulWidget {

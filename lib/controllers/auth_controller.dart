@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:E3yoon/controllers/call_Contrls/share_chat.dart';
 import 'package:E3yoon/controllers/user_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -213,14 +214,18 @@ class AuthController extends GetxController{
         var userData=data['data']['user'];
         userToken.value=data['data']['token'];
         userType.value=selectedUser.value;
+        print("=============${userData['id']}=============");
         await saveToken();
-        await userController.saveVals(selectedUser.value,data['data']['token'], userData['name'], userData['email'],userData['phone'],
+        await userController.saveVals("${userData['id']}",selectedUser.value,data['data']['token'], userData['name'], userData['email'],userData['phone'],
             userData['whatsapp'], userData['address'],userData['lat'],userData['long'], pass.text, userData['image']??"",
             userData['website'],userData['facebook'],userData['twitter'],userData['snap_chat'],userData['instagram']);
         if(userType.value=="client"){
           print("client");
+           chatContrl.currentUser.value="${userType.value}${userData['id']}";
+           print("firebase id ${chatContrl.currentUser}");
            favController.myFavs.value=await favController.getMyFav();
            ordersController.myOrders.value=await ordersController.getOrders();
+           chatContrl.getChats();
         } else {
           print("provider");
            controller.myBanners.value=userData['banners']??[];
@@ -294,6 +299,9 @@ class AuthController extends GetxController{
       userType.value="";
       userController.resetVals();
       myFavIds.clear();
+      chatContrl.currentUser.value="";
+      chatContrl.userChats.clear();
+      chatContrl.allChats.clear();
       ordersController.myOrders.clear();
     }else{ Popup("عفوا لم يتم الطلب يرجي المحاولة لاحقا");}
   }else{Popup(" يرجي الاتصال بالانترنت واعادة المحاولة");}

@@ -23,7 +23,7 @@ class MyAds extends StatelessWidget {
                   SizedBox(height: height*0.8,child: AdsBox())
                 ],),)),
               Positioned(left: 0,bottom: 0,
-                  child: BottomBar(width, [false,true,false,false,false])),
+                  child: BottomBar(width, [false,true,false,false])),
               Positioned(left: 6,bottom: height*0.1,
                   child: CircleAvatar(radius: 28,
                       backgroundColor: mainColor,child: IconButton(icon: Icon(Icons.add,size: 28,),
@@ -46,10 +46,7 @@ class MyAds extends StatelessWidget {
             String status=item['status'].toString().trim()!="accepted"?"لم يتم الموافقة بعد":"تمت الموافقة";
             // print(status);
             return  GestureDetector(onTap: (){
-            }, child: MainBox(width*0.42,item['image'], false, "${item['price']}",item['title'], "", status,()async{
-              print(item['id']);
-              confirmBox("حذف الاعلان", "هل انت متاكد من حذف الاعلان", ()async{await adController.deleteAd(item['id']);});
-            }));}
+            }, child: MainBox(width*0.42,item['image'], false, "${item['price']}",item['title'], "", status,(){}));}
       ): Center(child: Txt("لايوجد اعلانات بعد", Colors.black, 15, FontWeight.w600))
       ): Center(child: Txt("لايوجد اتصال بالانترنت", Colors.black, 15, FontWeight.w600),));
   }

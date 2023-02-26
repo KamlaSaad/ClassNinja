@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 import '../../controllers/fav_controller.dart';
 class AllGlasses extends StatelessWidget {
   AllGlasses({Key? key}) : super(key: key);
-  FavController favController=Get.put(FavController());
-  List data=Get.arguments;
   @override
   Widget build(BuildContext context) {
+    FavController favController=Get.put(FavController());
+    List data=Get.arguments;
     return Directionality(textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(elevation: 0,backgroundColor: Colors.white,

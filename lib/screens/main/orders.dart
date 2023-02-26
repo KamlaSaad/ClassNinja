@@ -4,6 +4,7 @@ import 'package:E3yoon/widgets/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
+import '../../controllers/call_Contrls/share_chat.dart';
 import '../../controllers/call_Contrls/share_orders.dart';
 class Orders extends StatefulWidget {
   const Orders({Key? key}) : super(key: key);
@@ -29,9 +30,10 @@ class _OrdersState extends State<Orders> {
             ListView.builder(itemCount: ordersController.myOrders.length,
               itemBuilder: (BuildContext context,int i){
               var item=ordersController.myOrders[i]['ad'];
-              print(userType.value);
-              print(item);
-                return Box(item['image'],item['title'],item['price'],userType.value=="client"?item['provider']:ordersController.myOrders[i]['user']);
+              // print(userType.value);
+              // print(item);
+                return Box(item['image'],item['title'],item['price'],
+                    userType.value=="client"?item['provider']:ordersController.myOrders[i]['user'],userType.value=="client");
               },
             )
             : ordersController.online.isTrue ?
@@ -47,7 +49,7 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  Widget Box(String img,String title,var price,Map provider){
+  Widget Box(String img,String title,var price,Map provider,bool client){
     return Container(margin: EdgeInsets.all(10),
       decoration: BoxDecoration(color: inputColor,borderRadius: BorderRadius.circular(20)),
       child: Column(
@@ -75,7 +77,7 @@ class _OrdersState extends State<Orders> {
        ),
        Divider(color: mainColor,thickness: 1,),
          ListTile(
-         leading: ProviderImg(provider['image']),
+         leading: defaultImg(provider['image'],21),
          title:   SizedBox(width: width*0.65,child: SingleChildScrollView(scrollDirection: Axis.horizontal,
           child: Txt(provider['name'], Colors.black, 17, FontWeight.w600))),
          contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
@@ -83,12 +85,35 @@ class _OrdersState extends State<Orders> {
            padding: const EdgeInsets.only(top: 8),
            child: Txt(provider['phone'], Colors.black, 16, FontWeight.w600),
          ),
-         trailing: Padding(
+         trailing: Container(width: 80,
            padding: const EdgeInsets.only(bottom:20),
-           child: CircleAvatar(backgroundColor: Colors.blue,radius: 15,
-             child: IconButton(icon: Icon(Icons.call,color: Colors.white,size: 15,),onPressed: (){
-               launch("tel://${provider['phone']}");
-             }),
+           child: Row(mainAxisAlignment: MainAxisAlignment.end,
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Transform.translate(
+                offset: Offset(0,-7),
+                 child: IconButton(onPressed: (){
+                   String user=client?"provider${provider['id']}":"client${provider['id']}";
+                   print(user);
+                   Map chat=chatContrl.getChatByUsers(user);
+                   if(chat.isEmpty){
+                     chatContrl.chatId.value="";
+                     chatContrl.chat.value={"id":"","name":provider['name'],
+                       "img":provider['image']??"","receiver":user };
+                   }else{
+                     chatContrl.chatId.value=chat['id'];
+                     chatContrl.chat.value=chat;
+                   }
+                   print(chatContrl.chat.value);
+                   Get.toNamed("/chat");
+                 }, icon: Icon(Icons.message,size: 30)),
+               )
+               ,CircleAvatar(backgroundColor: Colors.blue,radius: 15,
+                 child: IconButton(icon: Icon(Icons.call,color: Colors.white,size: 15,),onPressed: (){
+                   launch("tel://${provider['phone']}");
+                 }),
+               ),
+             ],
            ),
          ),
        )
@@ -97,8 +122,5 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  ProviderImg(var img){
-    return img!=null?CircleAvatar(radius: 21,backgroundColor: mainColor,backgroundImage:NetworkImage(img))
-    :CircleAvatar(radius: 25,backgroundColor: inputColor,backgroundImage:AssetImage("imgs/man.png"));
-  }
+
 }

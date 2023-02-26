@@ -1,6 +1,9 @@
+import 'package:E3yoon/controllers/get_token.dart';
+import 'package:E3yoon/screens/auth/share_contrl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controllers/call_Contrls/share_chat.dart';
 import '../../controllers/conn.dart';
 import '../../controllers/details_Controller.dart';
 import '../../widgets/shared.dart';
@@ -53,7 +56,28 @@ class _DetailsState extends State<Details> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Txt(contrl.data.value['name'], Colors.black, 18, FontWeight.bold),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(width: width*0.7,child: SingleChildScrollView(scrollDirection: Axis.horizontal,
+                            child:Txt(contrl.data['name'], Colors.black, 18, FontWeight.bold),)),
+                            contrl.data['id'].toString().trim()!=userController.id.value &&userToken.isNotEmpty?IconButton(onPressed: (){
+                              print(contrl.data['id']);
+                              print(userController.id.value);
+                              String id="provider${contrl.data['id']}";
+                              Map chat=chatContrl.getChatByUsers(id);
+                              if(chat.isEmpty){
+                                chatContrl.chatId.value="";
+                                chatContrl.chat.value={"id":"","name":contrl.data['name'],
+                                  "img":contrl.data['image']??"", "receiver":id };
+                              }else{
+                                chatContrl.chatId.value=chat['id'];
+                                chatContrl.chat.value=chat;
+                              }
+                              print(chatContrl.chat['id']);
+                              Get.toNamed("/chat");
+                            }, icon: Icon(Icons.message,size: 28,)):SizedBox(width: 0,)
+                          ],
+                        ),
                       ),
                       SizedBox(height: 5),
                       Container(height: 1,width: w,color: mainColor),
@@ -65,14 +89,6 @@ class _DetailsState extends State<Details> {
                         ],
                       ),
                       Container(height: 1,width: w,color: mainColor),
-                   // Container(height: 45,width: w*0.9,
-                   //  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   //      children: [
-                   //        Image.asset("imgs/map.png",width: 40,height: 40),
-                   //        Directionality(textDirection: TextDirection.ltr,
-                   //          child: Address(contrl.data['address']))
-                   //      ],
-                   //    )),
                       Container(height: 45,
                         // alignment: Alignment.centerRight,
                         child: ListTile(
